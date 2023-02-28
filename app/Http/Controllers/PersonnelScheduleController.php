@@ -13,6 +13,7 @@ date_default_timezone_set('Asia/Manila');
 
 class PersonnelScheduleController extends Controller
 {
+    
     public function list(Request $request){
         return json_encode(PersonnelSchedule::with(['schedule','personnel','bus'])->get());
     }
@@ -266,5 +267,41 @@ class PersonnelScheduleController extends Controller
         return response()->json([
             $bus_id, $from_to_location, $max_trips, $status
         ]);
+    }
+
+    public function check_bus(Request $request){
+        $bus = array();
+        // Check if still available for selected date
+        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        $bus_list = Bus::where([['company_id', $request->user()->company_id],['status',1]])->get(); //ERROR
+        $cnt_bus = 0;
+        
+        foreach($bus_list as $bl){
+            $cnt_bus = 0;
+            foreach($val as $vl){
+                if($vl->bus_id == $bl->id){
+                    $cnt_bus++; 
+                }
+            }
+            if($cnt_bus == 0){
+                $bus[] = $bl;
+            }
+            
+        }
+
+        //         $js_code = '<script>' . $bus[1] . '</script>';
+        // echo $js_code;
+        return response()->json(
+            $bus
+        );
+        
+    }
+
+    public function check_conductor(Request $request){
+        
+    }
+
+    public function check_operator(Request $request){
+        
     }
 }

@@ -90,7 +90,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Manage your fare information here. You can Add, Update, View, and Delete data.
+            Manage your fare information here. You can Add, Update, and View data.
         </div>
         <?php $crt = 0; ?>
         <!-- Bus Table -->
@@ -113,7 +113,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th></th>
-                                <th>List No.</th>
+                                <th>No.</th>
                                 <th>Route</th>
                                 <th>Bus Type</th>
                                 <th>Price</th>
@@ -151,10 +151,10 @@
                                                     Edit
                                                 </button>
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $fr->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $fr->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -367,42 +367,42 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/fare/delete', { 'id': id }).done(function(result) {
-                            var dialog = bootbox.dialog({
-                                centerVertical: true,
-                                closeButton: false,
-                                title: 'Deleting Information',
-                                message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                            });
-                            dialog.init(function(){
-                                setTimeout(function(){
-                                    dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                    window.location.reload();
-                                }, 1500);
+        // function Delete(id) {
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/fare/delete', { 'id': id }).done(function(result) {
+        //                     var dialog = bootbox.dialog({
+        //                         centerVertical: true,
+        //                         closeButton: false,
+        //                         title: 'Deleting Information',
+        //                         message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                     });
+        //                     dialog.init(function(){
+        //                         setTimeout(function(){
+        //                             dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                             window.location.reload();
+        //                         }, 1500);
                                 
-                            });
-                        });
-                    }
-                }
-            })
-        }
+        //                     });
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 @endsection

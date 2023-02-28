@@ -187,30 +187,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <!-- Input Conductor -->
-                            <div class="col mb-3">
-                                <label for="conductor_id" class="form-label">Conductor</label>
-                                <div class="input-group input-group-merge">
-                                    <select class="form-select" id="conductor_id" name="conductor_id">
-                                        <option value="" disabled selected hidden>Please Choose...</option>
-                                        @foreach($personnel as $p2)
-                                            @if($p2->company_id == Auth::user()->company_id)
-                                                @if($p2->status == 1)
-                                                    @if($p2->user_type == 2)
-                                                        <option value="{{ $p2->id }}">{{ $p2->name }}</option>
-                                                    @endif
-                                                @endif
-                                            @endif
-                                        @endforeach
-                                    </select>                                
-                                </div>
-                                <!-- Error Message -->
-                                <div class="error-pad">
-                                    <span class="errorMsg_conductor_id"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <!-- Input Dispatcher -->
                             <div class="col mb-3">
                                 <label for="dispatcher_id" class="form-label">Dispatcher</label>
@@ -235,8 +211,34 @@
                             </div>
                         </div>
                         <div class="row">
+                            <!-- Input Conductor -->
+                            <?php $cnt2 = 0; ?>
+                            <div class="col mb-3">
+                                <label for="conductor_id" class="form-label">Conductor</label>
+                                <div class="input-group input-group-merge">
+                                    <select class="form-select" id="conductor_id" name="conductor_id">
+                                        <option value="" disabled selected hidden>Please Choose...</option>
+                                        @foreach($personnel as $p2)
+                                            @if($p2->company_id == Auth::user()->company_id)
+                                                @if($p2->status == 1)
+                                                    @if($p2->user_type == 2)
+                                                        
+                                                            <option value="{{ $p2->id }}">{{ $p2->name }}</option>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                        @endforeach
+                                    </select>                                
+                                </div>
+                                <!-- Error Message -->
+                                <div class="error-pad">
+                                    <span class="errorMsg_conductor_id"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <!-- Input Operator -->
-                            <div class="col mb-0">
+                            <div class="col mb-3">
                                 <label for="operator_id" class="form-label">Driver</label>
                                 <div class="input-group input-group-merge">
                                     <select class="form-select" id="operator_id" name="operator_id">
@@ -278,7 +280,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Real-time Table. Assign your personnel schedules information here. You can Add, Update, View, and Delete data.
+            Real-time Table. Assign your personnel schedules information here. You can Add, Update, and View data.
         </div>
         <?php $cnt_bus = 0; $cnt_schedule = 0; $cnt_conductor = 0; $cnt_dispatcher = 0; $cnt_operator = 0;  ?>
         <!-- Schedule Table -->
@@ -322,7 +324,7 @@
                 @endif
             </div>
             <div class="card-body pad">
-                <div class="tbl table-responsive text-nowrap">
+                <div class="tbl table-responsive">
                     <table id=dataTable class="table table-hover">
                         <thead class="table-light">
                             <tr>
@@ -355,6 +357,9 @@
         $('#main-admin-schedule').addClass('active open')
         $('[id^="menu-"]').removeClass('active')
         $('#menu-personnel-schedule').addClass('active')
+        var dropdown1 = $('select[name="bus_id"]');
+        var dropdown2 = $('select[name="conductor_id"]');
+        var dropdown4 = $('select[name="operator_id"]');
 
         $(document).ready(function (e) {
             // Data Table
@@ -364,6 +369,47 @@
                 info: false,
                 order: [[0, 'desc']],
                 "bPaginate": false,
+            });
+
+            // Dynamic Dropdown
+            $('#date').on('change', function () {
+                // Clear Error Messages
+                $("#main-modal .errorMsg_bus_id").html('');
+                $("#main-modal .errorMsg_conductor_id").html('');
+                $("#main-modal .errorMsg_operator_id").html('');
+                var date = this.value;
+                var busType = '';
+                $('#bus_id').html('');
+                Controller.Post('/api/personnel_schedule/check_bus', { 'date': date }).done(function(result1) {
+                    dropdown1.prop('disabled', false);
+                    $('#bus_id').html('<option value="" disabled selected hidden>Please choose...</option>');
+                    $.each(result1, function (key, value1) {
+                        if(value1['bus_type'] == 1){
+                            busType = 'Aircon';
+                        }else if(value1['bus_type'] == 2){
+                            busType = 'Non-Aircon';
+                        }
+                        $('#bus_id').append('<option value="'+ value1['id'] +'">'+ value1['bus_no']+' - '+ busType + '</option>'); 
+                    });
+                });
+
+                $('#conductor_id').html('');
+                Controller.Post('/api/personnel_schedule/check_conductor', { 'date': date }).done(function(result) {
+                    dropdown2.prop('disabled', false);
+                    $('#conductor_id').html('<option value="" disabled selected hidden>Please choose...</option>');
+                    $.each(result, function (key, value) {
+                        // $('#conductor_id').append('<option value="'+ value.id +'">' + value.product_name + ' - ' + value.measurement + '</option>');                            
+                    });
+                });
+
+                $('#operator_id').html('');
+                Controller.Post('/api/personnel_schedule/check_operator', { 'date': date }).done(function(result) {
+                    dropdown4.prop('disabled', false);
+                    $('#operator_id').html('<option value="" disabled selected hidden>Please choose...</option>');
+                    $.each(result, function (key, value) {
+                        // $('#operator_id').append('<option value="'+ value.id +'">' + value.product_name + ' - ' + value.measurement + '</option>');                            
+                    });
+                });
             });
         })
 
@@ -585,7 +631,7 @@
                     }else{
                         $('#view-modal-footer').append('<button onclick="Edit('+id+')" type="button" class="btn btn-outline-primary">Edit</button>'); 
                     }
-                    $('#view-modal-footer').append('<button onclick="Delete('+id+')" type="button" class="btn btn-outline-danger">Delete</button>');
+                    // $('#view-modal-footer').append('<button onclick="Delete('+id+')" type="button" class="btn btn-outline-danger">Delete</button>');
                 }
 
             });
@@ -597,12 +643,15 @@
                 $('#view-max_trips').val(max_trips),
                 $('#view-modal').modal('show')
             });
-        });
+            });
 
         }
 
         // Onclick Add Function
         function Add(){
+            dropdown1.prop('disabled', true);
+            dropdown2.prop('disabled', true);
+            dropdown4.prop('disabled', true);
             $('#main-append').html('');
             document.getElementById("main-modalTitle").innerHTML= "Create Personnel Schedule Information";
             document.getElementById("main-submit").innerHTML= "Create";
@@ -876,44 +925,44 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            $('#view-modal').modal('hide');
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/personnel_schedule/delete', { 'id': id }).done(function(result) {
-                            var dialog = bootbox.dialog({
-                                centerVertical: true,
-                                closeButton: false,
-                                title: 'Deleting Information',
-                                message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                            });
-                            dialog.init(function(){
-                                setTimeout(function(){
-                                    dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                    window.location.reload();
-                                }, 1500);
+        // function Delete(id) {
+        //     $('#view-modal').modal('hide');
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/personnel_schedule/delete', { 'id': id }).done(function(result) {
+        //                     var dialog = bootbox.dialog({
+        //                         centerVertical: true,
+        //                         closeButton: false,
+        //                         title: 'Deleting Information',
+        //                         message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                     });
+        //                     dialog.init(function(){
+        //                         setTimeout(function(){
+        //                             dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                             window.location.reload();
+        //                         }, 1500);
                                 
-                            });
-                        });
-                    }
-                }
-            })
-        }
+        //                     });
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
     <script>
         function loadXMLDoc() {

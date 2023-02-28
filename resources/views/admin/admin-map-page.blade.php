@@ -33,7 +33,7 @@
                             <h3>Bus Trip Information</h3>
                             <ul>
                                 <li><strong>Departure</strong>: <span id="ETD"></span></li>
-                                <li><strong>Arrival</strong>: <span id="ETA"></span></li>
+                                <li><strong>ETA</strong>: <span id="ETA"></span></li>
                                 <li><strong>Duration</strong>: <span id="DURATION"></span></li>
                                 <li><strong>Distance</strong>: <span id="DISTANCE"></span></li>
                                 <li><strong>Current Location</strong>: <span id="LOCATION"></span></li>

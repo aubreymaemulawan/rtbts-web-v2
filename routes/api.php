@@ -123,6 +123,9 @@ Route::match(['get','post',], 'personnel_schedule/update', [PersonnelScheduleCon
 Route::match(['get','post',], 'personnel_schedule/delete', [PersonnelScheduleController::class,'delete']);
 Route::match(['get','post',], 'personnel_schedule/find', [PersonnelScheduleController::class,'find']);
 Route::match(['get','post',], 'personnel_schedule/find1', [PersonnelScheduleController::class,'find1']);
+Route::match(['get','post',], 'personnel_schedule/check_bus', [PersonnelScheduleController::class,'check_bus']);
+Route::match(['get','post',], 'personnel_schedule/check_conductor', [PersonnelScheduleController::class,'check_conductor']);
+Route::match(['get','post',], 'personnel_schedule/check_operator', [PersonnelScheduleController::class,'check_operator']);
 
 //Position
 Route::match(['get','post',], 'position/list', [PositionController::class,'list']);

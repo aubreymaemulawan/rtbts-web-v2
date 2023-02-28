@@ -24,10 +24,7 @@
             <div class="container">
                 <div id="realtime_map_status">
                 </div>
-            
-                <!-- <div><span class="badge bg-label-dark me-1">N/A</span></div> -->
                 <div class="row gy-4">
-
                     <div class="col-lg-5">
                         <div id="map" class="layout-container"></div>
                     </div>
@@ -35,12 +32,10 @@
                         <div class="portfolio-info">
                             <h3>Bus Trip Information</h3>
                             <ul>
-                                <!-- <li><h1><span id="realtime_map_status"></span></h1></li> -->
                                 <li><strong>Departure</strong>: <span id="ETD"></span></li>
-                                <li><strong>Arrival</strong>: <span id="ETA"></span></li>
+                                <li><strong>ETA</strong>: <span id="ETA"></span></li>
                                 <li><strong>Duration</strong>: <span id="DURATION"></span></li>
                                 <li><strong>Distance</strong>: <span id="DISTANCE"></span></li>
-                                <!--<li><strong>Current Location</strong>: <span id="LOCATION"></span></li>-->
                                 <hr>
                                 <li><strong>Trip Number</strong>: Trip {{$trip->trip_no}}</li>
                                 <li><strong>Bus Company</strong>: {{$trip->personnel_schedule->schedule->company->company_name}}</li>
@@ -69,7 +64,7 @@
                         </div>
                         <div class="portfolio-info mt-4" >
                             <h3>Bus Status Legend</h3>
-                            <ul><span class="badge bg-label-dark me-1">N/A</span> Status is not available or no status recorded yet.</ul>
+                            <ul><span class="badge bg-label-dark me-1">Standby</span> Status is not available or no status recorded yet.</ul>
                             <ul><span class="badge bg-label-secondary me-1">Break</span> Bus Trip is on break or on bus stop.</ul>
                             <ul><span class="badge bg-label-info me-1">Departed</span> Bus Trip has departed from its current location.</ul>
                             <ul><span class="badge bg-label-danger me-1">Cancelled</span> Bus Trip has been cancelled due to unforeseen problems.</ul>

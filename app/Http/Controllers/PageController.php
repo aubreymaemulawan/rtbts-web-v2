@@ -74,6 +74,8 @@ class PageController extends Controller
     public function personnel_schedule(){
         $personnel_schedule = PersonnelSchedule::orderBy('date','desc')->get();
         $trip = Trip::where('arrived',0)->get();
+        // $check_trips = Trip::where('arrived',0)->whereDate('created_at', '=', date('Y-m-d'))->get();
+        // $check_persched = PersonnelSchedule::whereDate('created_at', '=', date('Y-m-d'))->get();
         $schedule = Schedule::all();
         $bus = Bus::all();
         $personnel = Personnel::all();

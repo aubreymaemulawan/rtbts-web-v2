@@ -47,9 +47,9 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <label for="view-age" class="col-md-4 col-form-label">Age</label>
+                            <label for="view-birthdate" class="col-md-4 col-form-label">Birthdate</label>
                             <div class="col-md-8">
-                                <input disabled class="form-control" type="text" id="view-age" />
+                                <input disabled class="form-control" type="text" id="view-birthdate" />
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -103,6 +103,7 @@
                     <div class="modal-body">
                         <!-- Input Hidden ID -->
                         <input type="hidden" class="form-control" id="id" name="id">
+                        <input type="hidden" class="form-control" id="name" name="name">
                         <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{Auth::user()->company_id}}">
                         <div class="d-flex align-items-start align-items-sm-center gap-4">
                             <!-- Upload Profile Picture -->
@@ -135,14 +136,14 @@
                             <div class="col mb-0">
                                 <label for="add-username" class="form-label">Username</label>
                                 <div class="input-group input-group-merge">
-                                    <input disabled type="text" id="add-username" name="add-username" class="form-control"/>
+                                    <input readonly="readonly" type="text" id="add-username" name="add-username" class="form-control"/>
                                 </div>
                             </div>
                             <!-- Generate Password -->
                             <div class="col mb-0">
                                 <label for="add-password" class="form-label">Password</label>
                                 <div class="input-group input-group-merge">
-                                    <input disabled type="number" id="add-password" name="add-password" class="form-control"/>
+                                    <input readonly="readonly" type="number" id="add-password" name="add-password" class="form-control"/>
                                 </div>
                             </div>
                         </div>
@@ -155,7 +156,7 @@
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-id-card"></i>
                                     </span>
-                                    <input type="number" id="personnel_no" name="personnel_no" class="form-control" placeholder="00-0000-0000"/>
+                                    <input style="padding-left:10px;" readonly="readonly" type="number" id="personnel_no" name="personnel_no" class="form-control" placeholder="00-0000-0000"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
@@ -163,45 +164,63 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <!-- Input Name -->
-                            <div class="col mb-3">
-                                <label for="name" class="form-label">Full Name</label>
+                        <div class="row g-2 mb-3">
+                            <!-- Input First Name -->
+                            <div class="col">
+                                <label for="first_name" class="form-label">First Name</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-user"></i>
                                     </span>
-                                    <input type="text" id="name" name="name" class="form-control" placeholder="Last Name, First Name MI."/>
+                                    <input type="text" id="first_name" name="first_name" class="form-control" placeholder="John"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
-                                    <span class="errorMsg_name"></span>
+                                    <span class="errorMsg_first_name"></span>
                                 </div>
+                            </div>
+                            <!-- Input Last Name -->
+                            <div class="col">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-fullname2" class="input-group-text">
+                                        <i class="bx bx-user"></i>
+                                    </span>
+                                    <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Doe"/>
+                                </div>
+                                <!-- Error Message -->
+                                <div class="error-pad">
+                                    <span class="errorMsg_last_name"></span>
+                                </div>
+                            </div>
+                            <!-- Error Message -->
+                            <div class="error-pad1">
+                                <span class="errorMsg_name"></span>
                             </div>
                         </div>
                         <div class="row g-2">
-                            <!-- Input Age -->
+                            <!-- Input Birthdate -->
                             <div class="col mb-3">
-                                <label for="age" class="form-label">Age</label>
+                                <label for="age" class="form-label">Birthdate</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
-                                        <i class="bx bx-user-pin"></i>
+                                        <i class="bx bx-calendar"></i>
                                     </span>
-                                    <input type="number" id="age" name="age" class="form-control" placeholder="00"/>
+                                    <input type="date" id="birthdate" name="birthdate" class="form-control" />
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
-                                    <span class="errorMsg_age"></span>
+                                    <span class="errorMsg_birthdate"></span>
                                 </div>
                             </div>
                             <!-- Input Contact Number -->
                             <div class="col mb-3">
-                                <label for="contact_no" class="form-label">Contact Number</label>
+                                <label for="contact_no" class="form-label">Contact No.</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-phone-call"></i>
                                     </span>
-                                    <input type="number" id="contact_no" name="contact_no" class="form-control" placeholder="63 000 000 0000"/>
+                                    <input type="number" id="contact_no" name="contact_no" class="form-control" placeholder="09 000 000 000"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
@@ -267,6 +286,7 @@
                     <div class="modal-body">
                         <!-- Edit Hidden ID -->
                         <input type="hidden" class="form-control" id="edit-id" name="edit-id">
+                        <input type="hidden" class="form-control" id="edit-name" name="edit-name">
                         <input type="hidden" class="form-control" id="edit-new_img" name="edit-new_img">
                         <input type="hidden" class="form-control" id="edit-company_id" name="edit-company_id" value="{{Auth::user()->company_id}}">
                         <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -300,14 +320,14 @@
                             <div class="col mb-0">
                                 <label for="edit-username" class="form-label">Username</label>
                                 <div class="input-group input-group-merge">
-                                    <input disabled type="text" id="edit-username" name="edit-username" class="form-control"/>
+                                    <input readonly="readonly" type="text" id="edit-username" name="edit-username" class="form-control"/>
                                 </div>
                             </div>
                             <!-- Show Password -->
                             <div class="col mb-0">
                                 <label for="edit-password" class="form-label">Password</label>
                                 <div class="input-group input-group-merge">
-                                    <input disabled type="number" id="edit-password" name="edit-password" class="form-control"/>
+                                    <input readonly="readonly" type="number" id="edit-password" name="edit-password" class="form-control"/>
                                 </div>
                             </div>
                         </div>
@@ -320,7 +340,7 @@
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-id-card"></i>
                                     </span>
-                                    <input type="number" id="edit-personnel_no" name="edit-personnel_no" class="form-control" placeholder="00-0000-0000"/>
+                                    <input style="padding-left:10px;" readonly="readonly" type="number" id="edit-personnel_no" name="edit-personnel_no" class="form-control" placeholder="00-0000-0000"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
@@ -328,31 +348,49 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <!-- Edit Name -->
-                            <div class="col mb-3">
-                                <label for="edit-name" class="form-label">Full Name</label>
+                        <div class="row g-2 mb-3">
+                            <!-- Input First Name -->
+                            <div class="col">
+                                <label for="edit-first_name" class="form-label">First Name</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-user"></i>
                                     </span>
-                                    <input type="text" id="edit-name" name="edit-name" class="form-control" placeholder="Last Name, First Name MI."/>
+                                    <input type="text" id="edit-first_name" name="edit-first_name" class="form-control" />
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
-                                    <span class="errorMsg_name"></span>
+                                    <span class="errorMsg_first_name"></span>
                                 </div>
+                            </div>
+                            <!-- Input Last Name -->
+                            <div class="col">
+                                <label for="edit-last_name" class="form-label">Last Name</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-fullname2" class="input-group-text">
+                                        <i class="bx bx-user"></i>
+                                    </span>
+                                    <input type="text" id="edit-last_name" name="edit-last_name" class="form-control" />
+                                </div>
+                                <!-- Error Message -->
+                                <div class="error-pad">
+                                    <span class="errorMsg_last_name"></span>
+                                </div>
+                            </div>
+                            <!-- Error Message -->
+                            <div class="error-pad1">
+                                <span class="errorMsg_name"></span>
                             </div>
                         </div>
                         <div class="row g-2">
-                            <!-- Edit Age -->
+                            <!-- Edit Birthdate -->
                             <div class="col mb-3">
-                                <label for="edit-age" class="form-label">Age</label>
+                                <label for="edit-birthdate" class="form-label">Birthdate</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
-                                        <i class="bx bx-user-pin"></i>
+                                        <i class="bx bx-calendar"></i>
                                     </span>
-                                    <input type="number" id="edit-age" name="edit-age" class="form-control" placeholder="00"/>
+                                    <input type="date" id="edit-birthdate" name="edit-birthdate" class="form-control"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
@@ -361,12 +399,12 @@
                             </div>
                             <!-- Edit Contact Number -->
                             <div class="col mb-3">
-                                <label for="edit-contact_no" class="form-label">Contact Number</label>
+                                <label for="edit-contact_no" class="form-label">Contact No.</label>
                                 <div class="input-group input-group-merge">
                                     <span id="basic-icon-default-fullname2" class="input-group-text">
                                         <i class="bx bx-phone-call"></i>
                                     </span>
-                                    <input type="number" id="edit-contact_no" name="edit-contact_no" class="form-control" placeholder="63 000 000 0000"/>
+                                    <input type="number" id="edit-contact_no" name="edit-contact_no" class="form-control" placeholder="09 000 000 000"/>
                                 </div>
                                 <!-- Error Message -->
                                 <div class="error-pad">
@@ -441,7 +479,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Manage your personnel information here. You can Add, Update, View, and Delete data.
+            Manage your personnel information here. You can Add, Update, and View data.
         </div>
         <!-- Personnel Table -->
         <div class="card">
@@ -546,10 +584,10 @@
                                                 </button>
                                                 @endif
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $pn->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $pn->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -577,6 +615,10 @@
             $('#dataTable').DataTable();
             // Add Data to Database
             $(document).on('submit','#adding', function(e) {
+                var first = $.trim($("#first_name").val());
+                var last = $.trim($("#last_name").val());
+                var name = $.trim();
+                $("#name").val(last+', '+first);
                 e.preventDefault();
                 let addformData = new FormData($('#adding')[0]);
                 $.ajax({
@@ -608,7 +650,9 @@
                         const error1 = data.responseJSON.errors;
                         let error_personnel_no = "";
                         let error_name = "";
-                        let error_age = "";
+                        let error_first_name = "";
+                        let error_last_name = "";
+                        let error_birthdate = "";
                         let error_contact_no = "";
                         let error_address = "";
                         let error_user_type = "";
@@ -618,8 +662,8 @@
                                 error_personnel_no = ""+error1[listKey]+"";
                             }else if(listKey == "name"){
                                 error_name = ""+error1[listKey]+"";
-                            }else if(listKey == "age"){
-                                error_age = ""+error1[listKey]+"";
+                            }else if(listKey == "birthdate"){
+                                error_birthdate = ""+error1[listKey]+"";
                             }else if(listKey == "contact_no"){
                                 error_contact_no = ""+error1[listKey]+"";
                             }else if(listKey == "address"){
@@ -628,28 +672,40 @@
                                 error_user_type = ""+error1[listKey]+"";
                             }else if(listKey == "profile_picture"){
                                 error_profile_picture = ""+error1[listKey]+"";   
+                            }else if(listKey == "first_name"){
+                                error_first_name = ""+error1[listKey]+"";
+                            }else if(listKey == "last_name"){
+                                error_last_name = ""+error1[listKey]+"";
                             }
                         }
                         let msg_personnel_no = "<text>"+error_personnel_no+"</text>";
                         let msg_name = "<text>"+error_name+"</text>";
-                        let msg_age = "<text>"+error_age+"</text>";
+                        let msg_birthdate = "<text>"+error_birthdate+"</text>";
                         let msg_contact_no = "<text>"+error_contact_no+"</text>";
                         let msg_address = "<text>"+error_address+"</text>";
                         let msg_user_type = "<text>"+error_user_type+"</text>";
                         let msg_profile_picture = "<text>"+error_profile_picture+"</text>";
+                        let msg_first_name = "<text>"+error_first_name+"</text>";
+                        let msg_last_name = "<text>"+error_last_name+"</text>";
                         $("#add-modal .errorMsg_personnel_no").html(msg_personnel_no).addClass('text-danger').fadeIn(1000);
                         $("#add-modal .errorMsg_name").html(msg_name).addClass('text-danger').fadeIn(1000);
-                        $("#add-modal .errorMsg_age").html(msg_age).addClass('text-danger').fadeIn(1000);
+                        $("#add-modal .errorMsg_birthdate").html(msg_birthdate).addClass('text-danger').fadeIn(1000);
                         $("#add-modal .errorMsg_contact_no").html(msg_contact_no).addClass('text-danger').fadeIn(1000);
                         $("#add-modal .errorMsg_address").html(msg_address).addClass('text-danger').fadeIn(1000);
                         $("#add-modal .errorMsg_user_type").html(msg_user_type).addClass('text-danger').fadeIn(1000);
                         $("#add-modal .errorMsg_profile_picture").html(msg_profile_picture).addClass('text-danger').fadeIn(1000);
+                        $("#add-modal .errorMsg_first_name").html(msg_first_name).addClass('text-danger').fadeIn(1000);
+                        $("#add-modal .errorMsg_last_name").html(msg_last_name).addClass('text-danger').fadeIn(1000);
                         $("#add-modal button").attr('disabled',false);
                     }
                 });
             });
             // Update/Edit Data
             $(document).on('submit','#editing', function(e) {
+                var first = $.trim($("#edit-first_name").val());
+                var last = $.trim($("#edit-last_name").val());
+                var name = $.trim();
+                $("#edit-name").val(last+', '+first);
                 e.preventDefault();
                 let editformData = new FormData($('#editing')[0]);
                 $.ajax({
@@ -688,7 +744,9 @@
                         const error2 = data.responseJSON.errors;
                         let error_personnel_no = "";
                         let error_name = "";
-                        let error_age = "";
+                        let error_first_name = "";
+                        let error_last_name = "";
+                        let error_birthdate = "";
                         let error_contact_no = "";
                         let error_address = "";
                         let error_user_type = "";
@@ -699,8 +757,8 @@
                                 error_personnel_no = ""+error2[listKey]+"";
                             }else if(listKey == "edit-name"){
                                 error_name = ""+error2[listKey]+"";
-                            }else if(listKey == "edit-age"){
-                                error_age = ""+error2[listKey]+"";
+                            }else if(listKey == "edit-birthdate"){
+                                error_birthdate = ""+error2[listKey]+"";
                             }else if(listKey == "edit-contact_no"){
                                 error_contact_no = ""+error2[listKey]+"";
                             }else if(listKey == "edit-address"){
@@ -711,11 +769,17 @@
                                 error_profile_picture = ""+error2[listKey]+"";   
                             }else if(listKey == "edit-status"){
                                 error_status = ""+error2[listKey]+"";   
+                            }else if(listKey == "edit-first_name"){
+                                error_first_name = ""+error2[listKey]+"";   
+                            }else if(listKey == "edit-last_name"){
+                                error_last_name = ""+error2[listKey]+"";   
                             }
                         }
                         let msg_personnel_no = "<text>"+error_personnel_no+"</text>";
                         let msg_name = "<text>"+error_name+"</text>";
-                        let msg_age = "<text>"+error_age+"</text>";
+                        let msg_first_name = "<text>"+error_first_name+"</text>";
+                        let msg_last_name = "<text>"+error_last_name+"</text>";
+                        let msg_birthdate = "<text>"+error_birthdate+"</text>";
                         let msg_contact_no = "<text>"+error_contact_no+"</text>";
                         let msg_address = "<text>"+error_address+"</text>";
                         let msg_user_type = "<text>"+error_user_type+"</text>";
@@ -723,12 +787,14 @@
                         let msg_status = "<text>"+error_status+"</text>";
                         $("#edit-modal .errorMsg_personnel_no").html(msg_personnel_no).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_name").html(msg_name).addClass('text-danger').fadeIn(1000);
-                        $("#edit-modal .errorMsg_age").html(msg_age).addClass('text-danger').fadeIn(1000);
+                        $("#edit-modal .errorMsg_birthdate").html(msg_birthdate).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_contact_no").html(msg_contact_no).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_address").html(msg_address).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_user_type").html(msg_user_type).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_profile_picture").html(msg_profile_picture).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal .errorMsg_status").html(msg_status).addClass('text-danger').fadeIn(1000);
+                        $("#edit-modal .errorMsg_first_name").html(msg_first_name).addClass('text-danger').fadeIn(1000);
+                        $("#edit-modal .errorMsg_last_name").html(msg_last_name).addClass('text-danger').fadeIn(1000);
                         $("#edit-modal button").attr('disabled',false);
                     }
                 });
@@ -763,7 +829,8 @@
             });
             // Change Color of Status
             Controller.Post('/api/personnel/items', { 'id': id }).done(function(result) {
-                var date1 = moment(result.updated_at).format('MMMM Do YYYY, h:mm a')
+                var date1 = moment(result.updated_at).format('MMMM Do YYYY, h:mm a');
+                var birthday = moment(result.birthdate).format('MMMM Do YYYY');
                 document.getElementById("update").innerHTML="Last Updated : "+date1;
                 if(result.status == 1){
                     $('#view-status').addClass("btn btn-success")
@@ -780,11 +847,11 @@
                     var edit2 = str2.replace('rep',''+str1+'')
                     $('#view-modal-footer').append('<button onclick="Edit('+result.id+','+edit2+')" type="button" class="btn btn-outline-primary">Edit</button>');  
                 }
-                $('#view-modal-footer').append('<button onclick="Delete('+result.id+')" type="button" class="btn btn-outline-danger">Delete</button>');
+                // $('#view-modal-footer').append('<button onclick="Delete('+result.id+')" type="button" class="btn btn-outline-danger">Delete</button>');
                 $('#view-id').val(result.id),
                 $('#view-personnel_no').val(result.personnel_no),
                 $('#view-name').val(result.name),
-                $('#view-age').val(result.age),
+                $('#view-birthdate').val(birthday),
                 $('#view-contact_no').val(result.contact_no),
                 $('#view-address').val(result.address),
                 $('#view-user_type').val(result.user_type),
@@ -795,20 +862,24 @@
 
         // Onclick Add Function
         function Add(){
+            var unique_id = Math.floor(100000000 + Math.random() * 900000000);
             document.getElementById("add-modalTitle").innerHTML= "Create Personnel Information";
             document.getElementById("uploadedAvatar").src = "{{ asset('assets/img/avatars/default.jpg') }}";
             // Clear Input Fields
             $('#id').val('-1'),
-            $('#personnel_no').val(''),
+            // $('#personnel_no').val(''),
             $('#name').val(''),
             $('#age').val(''),
             $('#contact_no').val(''),
             $('#address').val(''),
             $('#profile_picture').val(''),
             $('#user_type').val(''),
+            $('#personnel_no').val(unique_id),
+            $('#first_name').val(''),
+            $('#last_name').val(''),
             // Clear Checkbox 
-            $('#add-username').val(''),
-            $('#add-password').val(''),
+            $('#add-username').val(unique_id),
+            $('#add-password').val(unique_id),
             $("#add-account").prop("checked", false);
             $("#add-credentials").hide();
             // Clear Error Messages
@@ -831,14 +902,15 @@
                     $("#add-credentials").hide();
                 }
             });
-            // Personnel_no == Username (add)
-            $('#personnel_no').keyup(function (){
-                $('#add-username').val($(this).val());
-            });
-            // Personnel_no == Password (add)
-            $('#personnel_no').keyup(function (){
-                $('#add-password').val($(this).val());
-            });
+            
+            // // Personnel_no == Username (add)
+            // $('#personnel_no').keyup(function (){
+            //     $('#add-username').val($(this).val());
+            // });
+            // // Personnel_no == Password (add)
+            // $('#personnel_no').keyup(function (){
+            //     $('#add-password').val($(this).val());
+            // });
         }
 
         // Onclick Edit Function
@@ -855,7 +927,9 @@
                 $('#edit-id').val(result.id),
                 $('#edit-personnel_no').val(result.personnel_no),
                 $('#edit-name').val(result.name),
-                $('#edit-age').val(result.age),
+                $('#edit-first_name').val(result.first_name),
+                $('#edit-last_name').val(result.last_name),
+                $('#edit-birthdate').val(result.birthdate),
                 $('#edit-contact_no').val(result.contact_no),
                 $('#edit-address').val(result.address),
                 $('#edit-user_type').val(result.user_type),
@@ -915,68 +989,69 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            $('#view-modal').modal('hide');
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/personnel/delete', { 'id': id }).done(function(result) {
-                            if(result == 1){
-                                bootbox.confirm({
-                                    title: "Oops! There is a personnel-schedule with this personnel.",
-                                    closeButton: false,
-                                    message: "Go to personnel-schedules list?",
-                                    buttons: {
-                                        cancel: {
-                                            label: 'No',
-                                            className : "btn btn-outline-secondary",
-                                        },
-                                        confirm: {
-                                            label: 'Yes',
-                                            className : "btn btn-primary",
-                                        }
-                                    },
-                                    centerVertical: true,
-                                    callback: function(result){
-                                        if(result) {
-                                            location.href = './personnel-schedule';
-                                        }
-                                    }
-                                    })
-                            }else{
-                                var dialog = bootbox.dialog({
-                                    centerVertical: true,
-                                    closeButton: false,
-                                    title: 'Deleting Information',
-                                    message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                                });
-                                dialog.init(function(){
-                                    setTimeout(function(){
-                                        dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                        window.location.reload();
-                                    }, 1500);
+        // function Delete(id) {
+        //     $('#view-modal').modal('hide');
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/personnel/delete', { 'id': id }).done(function(result) {
+        //                     if(result == 1){
+        //                         bootbox.confirm({
+        //                             title: "Oops! There is a personnel-schedule with this personnel.",
+        //                             closeButton: false,
+        //                             message: "Go to personnel-schedules list?",
+        //                             buttons: {
+        //                                 cancel: {
+        //                                     label: 'No',
+        //                                     className : "btn btn-outline-secondary",
+        //                                 },
+        //                                 confirm: {
+        //                                     label: 'Yes',
+        //                                     className : "btn btn-primary",
+        //                                 }
+        //                             },
+        //                             centerVertical: true,
+        //                             callback: function(result){
+        //                                 if(result) {
+        //                                     location.href = './personnel-schedule';
+        //                                 }
+        //                             }
+        //                             })
+        //                     }else{
+        //                         var dialog = bootbox.dialog({
+        //                             centerVertical: true,
+        //                             closeButton: false,
+        //                             title: 'Deleting Information',
+        //                             message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                         });
+        //                         dialog.init(function(){
+        //                             setTimeout(function(){
+        //                                 dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                                 window.location.reload();
+        //                             }, 1500);
                                     
-                                });
-                            }
-                        });
-                    }
-                }
-            })
-        }
+        //                         });
+        //                     }
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
+
     </script>
 @endsection
     

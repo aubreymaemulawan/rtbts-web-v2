@@ -150,7 +150,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Manage your route information here. You can Add, View, and Delete data.
+            Manage your route information here. You can Add, and View data.
         </div>
         <!-- Bus Table -->
         <div class="card">
@@ -163,7 +163,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th></th>
-                                <th>List No.</th>
+                                <th>No.</th>
                                 <th>Route Name</th>
                                 <th>Origin Address</th>
                                 <th>Destination Address</th>
@@ -196,10 +196,10 @@
                                                     Edit
                                                 </button>
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $rt->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $rt->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -524,69 +524,69 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            $('#view-modal').modal('hide');
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/route/delete', { 'id': id }).done(function(result) {
-                            if(result == 1){
-                                bootbox.confirm({
-                                    title: "Oops! There is a schedule with this route.",
-                                    closeButton: false,
-                                    message: "Go to schedules list?",
-                                    buttons: {
-                                        cancel: {
-                                            label: 'No',
-                                            className : "btn btn-outline-secondary",
-                                        },
-                                        confirm: {
-                                            label: 'Yes',
-                                            className : "btn btn-primary",
-                                        }
-                                    },
-                                    centerVertical: true,
-                                    callback: function(result){
-                                        if(result) {
-                                            location.href = './schedule';
-                                        }
-                                    }
-                                    })
-                            }
-                            else{
-                                var dialog = bootbox.dialog({
-                                centerVertical: true,
-                                closeButton: false,
-                                title: 'Deleting Information',
-                                message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                                });
-                                dialog.init(function(){
-                                    setTimeout(function(){
-                                        dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                        window.location.reload();
-                                    }, 1500);
+        // function Delete(id) {
+        //     $('#view-modal').modal('hide');
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/route/delete', { 'id': id }).done(function(result) {
+        //                     if(result == 1){
+        //                         bootbox.confirm({
+        //                             title: "Oops! There is a schedule with this route.",
+        //                             closeButton: false,
+        //                             message: "Go to schedules list?",
+        //                             buttons: {
+        //                                 cancel: {
+        //                                     label: 'No',
+        //                                     className : "btn btn-outline-secondary",
+        //                                 },
+        //                                 confirm: {
+        //                                     label: 'Yes',
+        //                                     className : "btn btn-primary",
+        //                                 }
+        //                             },
+        //                             centerVertical: true,
+        //                             callback: function(result){
+        //                                 if(result) {
+        //                                     location.href = './schedule';
+        //                                 }
+        //                             }
+        //                             })
+        //                     }
+        //                     else{
+        //                         var dialog = bootbox.dialog({
+        //                         centerVertical: true,
+        //                         closeButton: false,
+        //                         title: 'Deleting Information',
+        //                         message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                         });
+        //                         dialog.init(function(){
+        //                             setTimeout(function(){
+        //                                 dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                                 window.location.reload();
+        //                             }, 1500);
                                     
-                                });
-                            }
+        //                         });
+        //                     }
                             
-                        });
-                    }
-                }
-            })
-        }
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 @endsection

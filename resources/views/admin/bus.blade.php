@@ -196,7 +196,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Manage your bus information here. You can Add, Update, View, and Delete data.
+            Manage your bus information here. You can Add, Update, and View data.
         </div>
         <!-- Bus Table -->
         <div class="card">
@@ -258,10 +258,10 @@
                                                     Edit
                                                 </button>
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $bs->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $bs->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -294,7 +294,7 @@
             $('#view-modal-footer').html('')
             document.getElementById("view-modalTitle").innerHTML="View Bus Information";
             $('#view-modal-footer').append('<button onclick="Edit('+id+')" type="button" class="btn btn-outline-primary">Edit</button>');  
-            $('#view-modal-footer').append('<button onclick="Delete('+id+')" type="button" class="btn btn-outline-danger">Delete</button>');
+            // $('#view-modal-footer').append('<button onclick="Delete('+id+')" type="button" class="btn btn-outline-danger">Delete</button>');
             // Convert Timestamp to Date
             Controller.Post('/api/bus/items', { 'id': id }).done(function(result) {
                 var date1 = moment(result.updated_at).format('MMMM Do YYYY, h:mm a')
@@ -520,67 +520,67 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            $('#view-modal').modal('hide');
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/bus/delete', { 'id': id }).done(function(result) {
-                            if(result == 1){
-                                bootbox.confirm({
-                                    title: "Oops! There is a personnel-schedule with this bus.",
-                                    closeButton: false,
-                                    message: "Go to personnel-schedules list?",
-                                    buttons: {
-                                        cancel: {
-                                            label: 'No',
-                                            className : "btn btn-outline-secondary",
-                                        },
-                                        confirm: {
-                                            label: 'Yes',
-                                            className : "btn btn-primary",
-                                        }
-                                    },
-                                    centerVertical: true,
-                                    callback: function(result){
-                                        if(result) {
-                                            location.href = './personnel-schedule';
-                                        }
-                                    }
-                                })
-                            }else{
-                                var dialog = bootbox.dialog({
-                                    centerVertical: true,
-                                    closeButton: false,
-                                    title: 'Deleting Information',
-                                    message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                                });
-                                dialog.init(function(){
-                                    setTimeout(function(){
-                                        dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                        window.location.reload();
-                                    }, 1500);
+        // function Delete(id) {
+        //     $('#view-modal').modal('hide');
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/bus/delete', { 'id': id }).done(function(result) {
+        //                     if(result == 1){
+        //                         bootbox.confirm({
+        //                             title: "Oops! There is a personnel-schedule with this bus.",
+        //                             closeButton: false,
+        //                             message: "Go to personnel-schedules list?",
+        //                             buttons: {
+        //                                 cancel: {
+        //                                     label: 'No',
+        //                                     className : "btn btn-outline-secondary",
+        //                                 },
+        //                                 confirm: {
+        //                                     label: 'Yes',
+        //                                     className : "btn btn-primary",
+        //                                 }
+        //                             },
+        //                             centerVertical: true,
+        //                             callback: function(result){
+        //                                 if(result) {
+        //                                     location.href = './personnel-schedule';
+        //                                 }
+        //                             }
+        //                         })
+        //                     }else{
+        //                         var dialog = bootbox.dialog({
+        //                             centerVertical: true,
+        //                             closeButton: false,
+        //                             title: 'Deleting Information',
+        //                             message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                         });
+        //                         dialog.init(function(){
+        //                             setTimeout(function(){
+        //                                 dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                                 window.location.reload();
+        //                             }, 1500);
                                     
-                                });
-                            }
-                        });
-                    }
-                }
-            })
-        }
+        //                         });
+        //                     }
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 @endsection

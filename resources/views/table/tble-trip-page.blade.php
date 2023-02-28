@@ -37,7 +37,7 @@
                 }
             ?>
             @if(!$st)
-                <span class="badge bg-label-dark me-1">N/A</span>
+                <span class="badge bg-label-dark me-1">Standby</span>
             @else
                 @if($st->bus_status == 1)
                 <span class="badge bg-label-warning me-1">On Alley - {{$result1}}</span>

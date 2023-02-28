@@ -14,8 +14,10 @@ class Personnel extends Migration
             $table->integer('personnel_no')->unique();
             $table->integer('company_id')->unsigned();
             $table->string('name')->unique();
+            $table->string('first_name');
+            $table->string('last_name');
             $table->bigInteger('contact_no');
-            $table->integer('age');
+            $table->date('birthdate');
             $table->string('address');
             $table->string('profile_name')->nullable();
             $table->string('profile_path')->nullable();

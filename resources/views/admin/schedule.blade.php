@@ -104,7 +104,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Manage your schedule information here. You can Add, Update, View, and Delete data.
+            Manage your schedule information here. You can Add, Update, and View data.
         </div>
         <?php $crt = 0; ?>
         <!-- Schedule Table -->
@@ -122,7 +122,7 @@
                 @endif
             </div>
             <div class="card-body pad">
-                <div class="tbl table-responsive text-nowrap">
+                <div class="tbl table-responsive">
                     <table id=dataTable class="table table-hover">
                         <thead class="table-light">
                             <tr>
@@ -174,10 +174,10 @@
                                                     Edit
                                                 </button>
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $sd->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $sd->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -411,67 +411,67 @@
         }
 
         // Onclick Delete Function
-        function Delete(id) {
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/schedule/delete', { 'id': id }).done(function(result) {
-                            if(result == 1){
-                                bootbox.confirm({
-                                    title: "Oops! There is a personnel-schedule with this schedule.",
-                                    closeButton: false,
-                                    message: "Go to personnel-schedules list?",
-                                    buttons: {
-                                        cancel: {
-                                            label: 'No',
-                                            className : "btn btn-outline-secondary",
-                                        },
-                                        confirm: {
-                                            label: 'Yes',
-                                            className : "btn btn-primary",
-                                        }
-                                    },
-                                    centerVertical: true,
-                                    callback: function(result){
-                                        if(result) {
-                                            location.href = './personnel-schedule';
-                                        }
-                                    }
-                                    })
-                            }else{
-                                var dialog = bootbox.dialog({
-                                centerVertical: true,
-                                closeButton: false,
-                                title: 'Deleting Information',
-                                message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                                });
-                                dialog.init(function(){
-                                    setTimeout(function(){
-                                        dialog.find('.bootbox-body').html('Information Successfully deleted!');
-                                        window.location.reload();
-                                    }, 1500);
+        // function Delete(id) {
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/schedule/delete', { 'id': id }).done(function(result) {
+        //                     if(result == 1){
+        //                         bootbox.confirm({
+        //                             title: "Oops! There is a personnel-schedule with this schedule.",
+        //                             closeButton: false,
+        //                             message: "Go to personnel-schedules list?",
+        //                             buttons: {
+        //                                 cancel: {
+        //                                     label: 'No',
+        //                                     className : "btn btn-outline-secondary",
+        //                                 },
+        //                                 confirm: {
+        //                                     label: 'Yes',
+        //                                     className : "btn btn-primary",
+        //                                 }
+        //                             },
+        //                             centerVertical: true,
+        //                             callback: function(result){
+        //                                 if(result) {
+        //                                     location.href = './personnel-schedule';
+        //                                 }
+        //                             }
+        //                             })
+        //                     }else{
+        //                         var dialog = bootbox.dialog({
+        //                         centerVertical: true,
+        //                         closeButton: false,
+        //                         title: 'Deleting Information',
+        //                         message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                         });
+        //                         dialog.init(function(){
+        //                             setTimeout(function(){
+        //                                 dialog.find('.bootbox-body').html('Information Successfully deleted!');
+        //                                 window.location.reload();
+        //                             }, 1500);
                                     
-                                });
-                            }
+        //                         });
+        //                     }
                             
-                        });
-                    }
-                }
-            })
-        }
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 @endsection

@@ -11,7 +11,7 @@ use App\Models\Schedule;
 use App\Models\PersonnelSchedule;
 use DB;
 use File;
-
+ 
 date_default_timezone_set('Asia/Manila'); 
 
 class PersonnelController extends Controller
@@ -26,12 +26,16 @@ class PersonnelController extends Controller
 
     public function create(Request $request){
         // Validation Rules
+        // $js_code = '<script>' . $request->name . '</script>';
+        // echo $js_code;
         $request->validate([
             'company_id' => 'required',
             'personnel_no' => 'required|unique:personnel',
-            'name' => ['required', 'unique:personnel', Rule::unique('users','name')],
-            'contact_no' => 'required',
-            'age' => 'required',
+            'name' => ['unique:personnel', 'unique:users'],
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'contact_no' => 'required|digits:11',
+            'birthdate' => 'required',
             'address' => 'required',
             'user_type' => 'required',
             'profile_picture' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -43,13 +47,21 @@ class PersonnelController extends Controller
             'profile_picture.max' => 'The photo must not be greater than 2048 kilobytes.'
         ]);
 
+        $name = ucwords($request->name);
+        $first = ucwords($request->first_name);
+        $last = ucwords($request->last_name);
+        $first_name = trim($first);
+        $last_name = trim($last);
+
         // Create Data in DB (Personnel Table)
         $data = new Personnel();
         $data->company_id = $request->company_id;
         $data->personnel_no = $request->personnel_no;
-        $data->name = $request->name;
+        $data->name = $name;
+        $data->first_name = $first_name;
+        $data->last_name = $last_name;
         $data->contact_no = $request->contact_no;
-        $data->age = $request->age;
+        $data->birthdate = $request->birthdate;
         $data->address = $request->address;
         $data->user_type = $request->user_type;
         $data->status = 1;
@@ -64,12 +76,12 @@ class PersonnelController extends Controller
 
         // Save to DB (Personnel Table)
         $data->save();
-
+ 
         // If checkbox is checked, create account in DB (Account & User Table)
         if($request->input("add-account")==1){
             $data1 = new User();
             $data1->personnel_id = $data->id;
-            $data1->name = $request->name;
+            $data1->name = $name;
             $data1->email = $request->personnel_no;
             $data1->password = bcrypt($request->personnel_no);
             $data1->user_type = $request->user_type;
@@ -92,9 +104,11 @@ class PersonnelController extends Controller
         $request->validate([
             'edit-company_id' => 'required',
             'edit-personnel_no' => ['required', Rule::unique('personnel','personnel_no')->ignore($request->input("edit-id"))],
-            'edit-name' => ['required', Rule::unique('personnel','name')->ignore($request->input("edit-id"))],
-            'edit-contact_no' => 'required',
-            'edit-age' => 'required',
+            'edit-name' => [Rule::unique('personnel','name')->ignore($request->input("edit-id"))],
+            'edit-first_name' => 'required',
+            'edit-last_name' => 'required',
+            'edit-contact_no' => 'required|digits:11',
+            'edit-birthdate' => 'required',
             'edit-address' => 'required',
             'edit-user_type' => 'required',
             'edit-status' => 'required' ,
@@ -104,13 +118,22 @@ class PersonnelController extends Controller
             'edit-personnel_no.unique' => 'The id number has already been taken.',
             'edit-name.required' => 'The name field is required.',
             'edit-name.unique' => 'The name has already been taken.',
+            'edit-first_name.required' => 'The first name field is required.',
+            'edit-last_name.required' => 'The last name field is required.',
             'edit-contact_no.required' => 'The contact field is required.',
-            'edit-age.required' => 'The age field is required.',
+            'edit-contact_no.digits' => 'The contact no must be 11 digits.',
+            'edit-birthdate.required' => 'The birthdate field is required.',
             'edit-address.required' => 'The address field is required.',
             'edit-user_type.required' => 'The user type selection is required.',
             'edit-status.required' => 'The status field is required.',
             'edit-profile_picture.max' => 'The photo must not be greater than 2048 kilobytes.'
         ]);
+
+        $name = ucwords($request->input("edit-name"));
+        $first = ucwords($request->input("edit-first_name"));
+        $last = ucwords($request->input("edit-last_name"));
+        $first_name = trim($first);
+        $last_name = trim($last);
 
         $count1 = 0;
         $count2 = 0;
@@ -141,9 +164,11 @@ class PersonnelController extends Controller
             $data = Personnel::find($request->input("edit-id"));
             $data->company_id = $request->input("edit-company_id");
             $data->personnel_no = $request->input("edit-personnel_no");
-            $data->name = $request->input("edit-name");
+            $data->name = $name;
+            $data->first_name = $first_name;
+            $data->last_name = $last_name;
             $data->contact_no = $request->input("edit-contact_no");
-            $data->age = $request->input("edit-age");
+            $data->birthdate = $request->input("edit-birthdate");
             $data->address = $request->input("edit-address");
             $data->user_type = $request->input("edit-user_type");
             $data->status = $request->input("edit-status");
@@ -178,7 +203,7 @@ class PersonnelController extends Controller
 
             // Update Info In DB (User Table)
             DB::table('users') ->where('personnel_id', $request->input("edit-id"))->update([
-                    'name' => $request->input("edit-name"),
+                    'name' => $name,
                     'user_type' => $request->input("edit-user_type")
             ]);
 
@@ -194,7 +219,7 @@ class PersonnelController extends Controller
                 if($request->input("edit-status") == 1){
                     $data3 = new User();
                     $data3->personnel_id = $request->input("edit-id");
-                    $data3->name = $request->input("edit-name");
+                    $data3->name = $name;
                     $data3->email = $request->input("edit-personnel_no");
                     $data3->password = bcrypt($request->input("edit-personnel_no"));
                     $data3->user_type = $request->input("edit-user_type");
@@ -270,7 +295,7 @@ class PersonnelController extends Controller
                 if($request->input("edit-status") == 1 && count($acc_tbl) != 0 && count($user_tbl) == 0){
                     $data4 = new User();
                     $data4->personnel_id = $request->input("edit-id");
-                    $data4->name = $request->input("edit-name");
+                    $data4->name = $name;
                     $data4->email = $email;
                     $data4->password = bcrypt($password);
                     $data4->user_type = $request->input("edit-user_type");;
@@ -324,12 +349,14 @@ class PersonnelController extends Controller
      
     public function update_profile(Request $request){
         $request->validate([
-            'name' => ['required', Rule::unique('personnel','name')->ignore($request->id)],
+            'name' => [Rule::unique('personnel','name')->ignore($request->input("id"))],
             'email' => ['required'],
-            'age' => 'required',
-            'contact_no' => 'required',
+            'birthdate' => 'required',
+            'contact_no' => 'required|digits:11',
             'address' => 'required',
             'profile_picture' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048' ,
+            'first_name' => 'required',
+            'last_name' => 'required',
         ],[
             'contact_no.required' => 'The contact number field is required.',
             'email.required' => 'The username field is required.',
@@ -337,12 +364,20 @@ class PersonnelController extends Controller
             'profile_picture.max' => 'The photo must not be greater than 2048 kilobytes.'
         ]);
 
+        $name = ucwords($request->input("name"));
+        $first = ucwords($request->input("first_name"));
+        $last = ucwords($request->input("last_name"));
+        $first_name = trim($first);
+        $last_name = trim($last);
+
         // Update Data in DB (Company Table)
         $data = Personnel::find($request->input("id"));
-        $data->name = $request->input("name");
+        $data->name = $name;
+        $data->first_name = $first_name;
+        $data->last_name = $last_name;
         $data->address = $request->input("address");
         $data->contact_no = $request->input("contact_no");
-        $data->age = $request->input("age");
+        $data->birthdate = $request->input("birthdate");
 
         $pp = Personnel::where('id',$request->input("id"))->value('profile_path');
         $str = ltrim($pp, 'public/');
@@ -374,7 +409,7 @@ class PersonnelController extends Controller
 
         // Update Info In DB (User Table)
         DB::table('users')->where('personnel_id', $request->input("id"))->update([
-            'name' => $request->input("name"),
+            'name' => $name,
             'email' => $request->input("email")
         ]);
 

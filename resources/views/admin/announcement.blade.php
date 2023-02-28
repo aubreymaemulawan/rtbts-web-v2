@@ -126,7 +126,7 @@
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Create, Update, and, Delete announcements here for your intended audience.
+            Create announcements here for your intended audience.
         </div>
         <!-- Schedule Table -->
         <div class="card">
@@ -202,10 +202,10 @@
                                                     View
                                                 </button>
                                                 <!-- Delete -->
-                                                <button onclick="Delete({{ $rem->id }})" class="dropdown-item" href="javascript:void(0);">
+                                                <!-- <button onclick="Delete({{ $rem->id }})" class="dropdown-item" href="javascript:void(0);">
                                                     <i class="bx bx-trash me-1"></i>
                                                     Delete
-                                                </button>
+                                                </button> -->
                                             </div>
                                         </div>
                                     </td>
@@ -328,43 +328,43 @@
         }
         
         // Onclick Delete Function
-        function Delete(id) {
-            $('#view-modal').modal('hide');
-            bootbox.confirm({
-                title: "Deleting Information",
-                closeButton: false,
-                message: "Are you sure you want to delete this item? This cannot be undone.",
-                buttons: {
-                    cancel: {
-                        label: 'Cancel',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Confirm',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        Controller.Post('/api/reminder/delete', { 'id': id }).done(function(result) {
-                            var dialog = bootbox.dialog({
-                                centerVertical: true,
-                                closeButton: false,
-                                title: 'Deleting Information',
-                                message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
-                            });
-                            dialog.init(function(){
-                                setTimeout(function(){
-                                    dialog.find('.bootbox-body').html('Announcement Successfully deleted!');
-                                    window.location.reload();
-                                }, 1500);
+        // function Delete(id) {
+        //     $('#view-modal').modal('hide');
+        //     bootbox.confirm({
+        //         title: "Deleting Information",
+        //         closeButton: false,
+        //         message: "Are you sure you want to delete this item? This cannot be undone.",
+        //         buttons: {
+        //             cancel: {
+        //                 label: 'Cancel',
+        //                 className : "btn btn-outline-secondary",
+        //             },
+        //             confirm: {
+        //                 label: 'Confirm',
+        //                 className : "btn btn-primary",
+        //             }
+        //         },
+        //         centerVertical: true,
+        //         callback: function(result){
+        //             if(result) {
+        //                 Controller.Post('/api/reminder/delete', { 'id': id }).done(function(result) {
+        //                     var dialog = bootbox.dialog({
+        //                         centerVertical: true,
+        //                         closeButton: false,
+        //                         title: 'Deleting Information',
+        //                         message: '<p class="spinner-border" role="status"> <span class="visually-hidden">Loading...</span> </p>'
+        //                     });
+        //                     dialog.init(function(){
+        //                         setTimeout(function(){
+        //                             dialog.find('.bootbox-body').html('Announcement Successfully deleted!');
+        //                             window.location.reload();
+        //                         }, 1500);
                                 
-                            });
-                        });
-                    }
-                }
-            })
-        }
+        //                     });
+        //                 });
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 @endsection

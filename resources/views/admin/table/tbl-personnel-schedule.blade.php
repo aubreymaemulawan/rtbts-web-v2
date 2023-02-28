@@ -133,10 +133,10 @@
                             @endif
                             
                             <!-- Delete -->
-                            <button onclick="Delete({{ $ps->id }})" class="dropdown-item" href="javascript:void(0);">
+                            <!-- <button onclick="Delete({{ $ps->id }})" class="dropdown-item" href="javascript:void(0);">
                                 <i class="bx bx-trash me-1"></i>
                                 Delete
-                            </button>
+                            </button> -->
                         @endif
                     </div>
                 </div>

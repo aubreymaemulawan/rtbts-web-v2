@@ -26,6 +26,7 @@
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
                                 <input type="hidden" class="form-control" id="edit-new_img" name="edit-new_img">
+                                <input type="hidden" class="form-control" id="name" name="name" value="{{Auth::user()->name}}">
                                 <input type="hidden" class="form-control" id="id" name="id" value="{{Auth::user()->personnel_id}}">
                                 <input type="hidden" class="form-control" id="password" name="password" value="{{Auth::user()->password}}">
                                 <!-- Upload Profile Picture -->
@@ -71,11 +72,29 @@
                                 </div>
                                 <!-- Input Name -->
                                 <div class="mb-3 col-md-6">
-                                    <label for="name" class="form-label">Name</label>
-                                    <input class="form-control" type="text" id="name" name="name"/>
-                                    <!-- Error Message -->
-                                    <div class="error-pad">
-                                        <span class="errorMsg_name"></span>
+                                    <div class="row">                                   
+                                        <!-- Input First Name -->
+                                        <div class="mb-3 col-md-6">
+                                            <label for="first_name" class="form-label">First Name</label>
+                                            <input class="form-control" type="text" id="first_name" name="first_name"/>
+                                            <!-- Error Message -->
+                                            <div class="error-pad">
+                                                <span class="errorMsg_first_name"></span>
+                                            </div>
+                                        </div>
+                                        <!-- Input Last Name -->
+                                        <div class="col-md-6">
+                                            <label for="last_name" class="form-label">Last Name</label>
+                                            <input class="form-control" type="text" id="last_name" name="last_name"/>
+                                            <!-- Error Message -->
+                                            <div class="error-pad">
+                                                <span class="errorMsg_last_name"></span>
+                                            </div>
+                                        </div>
+                                        <!-- Error Message -->
+                                        <div class="error-pad1">
+                                            <span class="errorMsg_name"></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- Input Company -->
@@ -87,13 +106,13 @@
                                         <span class="errorMsg_company_id"></span>
                                     </div>
                                 </div>
-                                <!-- Input Age -->
+                                <!-- Input Birthdate -->
                                 <div class="mb-3 col-md-6">
-                                    <label for="age" class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="age" name="age"/>
+                                    <label for="birthdate" class="form-label">Birthdate</label>
+                                    <input type="date" class="form-control" id="birthdate" name="birthdate"/>
                                     <!-- Error Message -->
                                     <div class="error-pad">
-                                        <span class="errorMsg_age"></span>
+                                        <span class="errorMsg_birthdate"></span>
                                     </div> 
                                 </div>
                                 <!-- Input Usertype -->
@@ -163,6 +182,8 @@
                 $("#main .errorMsg_user_type").html('');
                 $("#main .errorMsg_email").html('');
                 $("#main .errorMsg_name").html('');
+                $("#main .errorMsg_first_name").html('');
+                $("#main .errorMsg_last_name").html('');
                 $("#main .errorMsg_age").html('');
                 $("#main .errorMsg_address").html('');
                 $("#main .errorMsg_contact_no").html('');
@@ -173,7 +194,9 @@
                 $('#user_type').val("Dispatcher"),
                 $('#email').val("{{Auth::user()->email}}"),
                 $('#name').val(result.name),
-                $('#age').val(result.age),
+                $('#first_name').val(result.first_name),
+                $('#last_name').val(result.last_name),
+                $('#birthdate').val(result.birthdate),
                 $('#address').val(result.address),
                 $('#contact_no').val(result.contact_no)
             })
@@ -184,6 +207,10 @@
             $('#dataTable').DataTable();
             // Update/Edit Data
             $(document).on('submit','#updating', function(e) {
+                var first = $.trim($("#first_name").val());
+                var last = $.trim($("#last_name").val());
+                var name = $.trim();
+                $("#name").val(last+', '+first);
                 e.preventDefault();
                 let editformData = new FormData($('#updating')[0]);
                 $.ajax({
@@ -215,7 +242,9 @@
                         let error_profile_picture = "";
                         let error_email = "";
                         let error_name = "";
-                        let error_age = "";
+                        let error_first_name = "";
+                        let error_last_name = "";
+                        let error_birthdate = "";
                         let error_contact_no = "";
                         let error_address = "";
                         for (const listKey in error2){
@@ -225,26 +254,34 @@
                                 error_email = ""+error2[listKey]+"";
                             }else if(listKey == "name"){
                                 error_name = ""+error2[listKey]+"";
-                            }else if(listKey == "age"){
-                                error_age = ""+error2[listKey]+"";
+                            }else if(listKey == "birthdate"){
+                                error_birthdate = ""+error2[listKey]+"";
                             }else if(listKey == "contact_no"){
                                 error_contact_no = ""+error2[listKey]+"";   
                             }else if(listKey == "address"){
                                 error_address = ""+error2[listKey]+"";   
+                            }else if(listKey == "first_name"){
+                                error_first_name = ""+error2[listKey]+"";   
+                            }else if(listKey == "last_name"){
+                                error_last_name = ""+error2[listKey]+"";   
                             }
                         }
                         let msg_profile_picture = "<text>"+error_profile_picture+"</text>";
                         let msg_email = "<text>"+error_email+"</text>";
                         let msg_name = "<text>"+error_name+"</text>";
-                        let msg_age = "<text>"+error_age+"</text>";
+                        let msg_first_name = "<text>"+error_first_name+"</text>";
+                        let msg_last_name = "<text>"+error_last_name+"</text>";
+                        let msg_birthdate = "<text>"+error_birthdate+"</text>";
                         let msg_contact_no = "<text>"+error_contact_no+"</text>";
                         let msg_address = "<text>"+error_address+"</text>";
                         $("#main .errorMsg_profile_picture").html(msg_profile_picture).addClass('text-danger').fadeIn(1000);
                         $("#main .errorMsg_email").html(msg_email).addClass('text-danger').fadeIn(1000);
                         $("#main .errorMsg_name").html(msg_name).addClass('text-danger').fadeIn(1000);
-                        $("#main .errorMsg_age").html(msg_age).addClass('text-danger').fadeIn(1000);
+                        $("#main .errorMsg_birthdate").html(msg_birthdate).addClass('text-danger').fadeIn(1000);
                         $("#main .errorMsg_contact_no").html(msg_contact_no).addClass('text-danger').fadeIn(1000);
                         $("#main .errorMsg_address").html(msg_address).addClass('text-danger').fadeIn(1000);
+                        $("#main .errorMsg_first_name").html(msg_first_name).addClass('text-danger').fadeIn(1000);
+                        $("#main .errorMsg_last_name").html(msg_last_name).addClass('text-danger').fadeIn(1000);
                         $("#main button").attr('disabled',false);
                     }
                 });
