@@ -98,16 +98,18 @@ Route::group(['middleware' => ['auth', 'conductor']], function() {
 // Dispatcher Web Views
 Route::group(['middleware' => ['auth', 'dispatcher']], function() {
     Route::get('/dispatcher', [DispatcherController::class, 'index'])->name('dispatcher');
-    Route::get('/dispatcher-schedule', [PageController::class, 'dispatcher_schedule']);
+    // Route::get('/dispatcher-schedule', [PageController::class, 'dispatcher_schedule']);
     Route::get('/dispatcher-trip', [PageController::class, 'dispatcher_trip']);
     Route::get('/dispatcher-profile', [PageController::class, 'dispatcher_profile']);
     Route::get('/dispatcher-password', [PageController::class, 'dispatcher_password']);
     Route::get('/dispatcher-announcement', [PageController::class, 'dispatcher_announcement']);
+    Route::get('/dispatcher-assign-schedule', [PageController::class, 'dispatcher_assign_schedule']); //
 
     // RealTime Tables
-    Route::get('/tbl-dispatcher-schedule', [RealTimeController::class, 'tbl_dispatcher_schedule']);
+    // Route::get('/tbl-dispatcher-schedule', [RealTimeController::class, 'tbl_dispatcher_schedule']);
     Route::get('/tbl-dispatcher-trip', [RealTimeController::class, 'tbl_dispatcher_trip']);
-});
+    Route::get('/tbl-dispatcher-assign-schedule', [RealTimeController::class, 'tbl_dispatcher_assign_schedule']); //
+}); 
 
 // Operator Web Views
 Route::group(['middleware' => ['auth', 'operator']], function() {

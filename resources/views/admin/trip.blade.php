@@ -38,9 +38,9 @@
         </div>
         <!-- Trip Table -->
         <div class="card">
-            <div class="card-header color">
+            <!-- <div class="card-header color">
                 <a href="./personnel-schedule" type="button" class="btn rounded-pill btn-primary">Go to Schedules</a>
-            </div>
+            </div> -->
             <div class="card-body pad">
                 <div class="tbl table-responsive text-nowrap">
                     <table id=dataTable class="table table-hover">

@@ -256,6 +256,11 @@
                                     <h6 class="m-0 me-2">Announcements <span class="badge bg-label-primary rounded-pill">Recent</span></h6>
                                 </div>
                             </div>
+                            @if($announce == null)
+                            <div class="card-body">
+                                <center><div class="mt-4 ">No messages available!</div></center>
+                            </div>
+                            @else
                             <div class="card-body">
                                 <ul class="p-0 m-0 mt-4">
                                     <li class="d-flex mb-1 pb-1">
@@ -293,16 +298,15 @@
                                             <small class="fw-semibold">{{$result}}</small>
                                         </div>
                                     </li>                                        
-
                                     <li class="d-flex mb-1 pb-1">
-                                    <div class="avatar flex-shrink-0 me-3">
-                                        </div>
+                                        <div class="avatar flex-shrink-0 me-3"></div>
                                         <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                         <a href="./dispatcher-announcement" class="btn btn-sm btn-outline-primary">View Messages</a>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
+                            @endif
                         </div>
                     </div>
 

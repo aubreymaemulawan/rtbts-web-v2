@@ -1,6 +1,5 @@
-
 @foreach($personnel_schedule as $ps)
-    @if($ps->schedule->company_id == Auth::user()->company_id)
+    @if($ps->schedule->company_id == Auth::user()->personnel->company_id)
     <?php $count = 0; ?>
         <tr class="tbl">
             <td></td>
@@ -113,7 +112,31 @@
                             <i class="bx bx-info-square me-1"></i>
                             View
                         </button>
-                      
+                        @if($count != 0)
+                        @else
+                            <?php
+                                $date1 = new DateTime($ps->created_at);
+                                $result1 = $date1->format('F j, Y');
+
+                                $date2 = new DateTime();
+                                $result2 = $date2->format('F j, Y');
+                            ?>
+                            @if($ps->status == 3 && $result1 != $result2)
+                              
+                            @else
+                            <!-- Edit -->
+                            <button onclick="Edit({{ $ps->id }})" class="dropdown-item" href="javascript:void(0);">
+                                <i class="bx bx-edit-alt me-1"></i>
+                                Edit
+                            </button>
+                            @endif
+                            
+                            <!-- Delete -->
+                            <!-- <button onclick="Delete({{ $ps->id }})" class="dropdown-item" href="javascript:void(0);">
+                                <i class="bx bx-trash me-1"></i>
+                                Delete
+                            </button> -->
+                        @endif
                     </div>
                 </div>
             </td>

@@ -26,8 +26,6 @@ class PersonnelController extends Controller
 
     public function create(Request $request){
         // Validation Rules
-        // $js_code = '<script>' . $request->name . '</script>';
-        // echo $js_code;
         $request->validate([
             'company_id' => 'required',
             'personnel_no' => 'required|unique:personnel',
@@ -157,7 +155,7 @@ class PersonnelController extends Controller
             }
         }
         if($request->input("edit-status") == 2 && ($count1 != 0 || $count2 != 0 || $count3 != 0)){ 
-            // There is an active assigned-schedule using that bus id
+            // There is an active assigned-schedule using that personnel id
             return response()->json(1);
         }else{  
             // Update Data in DB (Personnel Table)
@@ -313,6 +311,14 @@ class PersonnelController extends Controller
                 DB::table('personnel_schedule')->where([['operator_id', '=', $request->input("edit-id")],['status', '=', 1]])->update(['status' => 4]);
             }
 
+            // If usertype changed, save to Personnel Role DB
+            // $data = Personnel::find($request->input("edit-id"));
+
+            // $data2 = new Account();
+            // $data2->personnel_id = $request->input("edit-id");
+            // $data2->email = $request->input("edit-personnel_no");
+            // $data2->password = $request->input("edit-personnel_no");
+            // $data2->save();
             // Return 
             return json_encode(
                 ['success'=>true]

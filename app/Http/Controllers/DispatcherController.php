@@ -425,9 +425,9 @@ class DispatcherController extends Controller
         $personnel = Personnel::all();
         $com_id = Personnel::where('id',$personnel_id)->value('company_id');
         $announce = Reminder::where([['company_id', $com_id],['user_type',1]])->orWhere('user_type',3)->orWhere('user_type',6)->latest('created_at')->first();
-        if($announce==null ){
-            $announce = 0;
-        }
+        // if($announce == null ){
+        //     $announce = 0;
+        // }
 
         return view('dispatcher.dashboard',compact(
             'company','personnel',

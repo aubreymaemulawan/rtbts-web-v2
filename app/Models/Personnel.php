@@ -34,4 +34,8 @@ class Personnel extends Model
     public function view_message(){
         return $this->hasMany(ViewMessage::class);
     }
+    // INVERSE: A Personnel has many Personnel Role
+    public function personnel_role(){
+        return $this->hasMany(PersonnelRole::class);
+    }
 }

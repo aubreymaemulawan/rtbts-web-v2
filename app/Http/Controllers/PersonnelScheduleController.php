@@ -24,45 +24,38 @@ class PersonnelScheduleController extends Controller
 
     public function create(Request $request){
         // Check if still available for selected date
-        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
-        $cnt_bus = 0;
-        $cnt_conductor = 0;
-        $cnt_dispatcher = 0;
-        $cnt_operator = 0;
-        // Return error
-        foreach($val as $vl){
-            if($vl->bus_id == $request->bus_id){
-                $cnt_bus++; 
-            }
-            else if($vl->conductor_id == $request->conductor_id){
-                $cnt_conductor++; 
-            }
-            // else if($vl->dispatcher_id == $request->dispatcher_id){
-            //     $cnt_dispatcher++; 
-            // }
-            else if($vl->operator_id == $request->operator_id){
-                $cnt_operator++; 
-            }
-        }
-
-        if($cnt_bus != 0){
-            return response()->json(1);
-        }
-        if($cnt_conductor != 0){
-            return response()->json(2);
-        }
-        // if($cnt_dispatcher != 0){
-        //     return response()->json(3);
+        // $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        // $cnt_bus = 0;
+        // $cnt_conductor = 0;
+        // $cnt_dispatcher = 0;
+        // $cnt_operator = 0;
+        // // Return error
+        // foreach($val as $vl){
+        //     if($vl->bus_id == $request->bus_id){
+        //         $cnt_bus++; 
+        //     }
+        //     else if($vl->conductor_id == $request->conductor_id){
+        //         $cnt_conductor++; 
+        //     }
+        //     else if($vl->operator_id == $request->operator_id){
+        //         $cnt_operator++; 
+        //     }
         // }
-        if($cnt_operator != 0){
-            return response()->json(4);
-        }
+
+        // if($cnt_bus != 0){
+        //     return response()->json(1);
+        // }
+        // if($cnt_conductor != 0){
+        //     return response()->json(2);
+        // }
+        // if($cnt_operator != 0){
+        //     return response()->json(4);
+        // }
 
         // Validation Rules
         $request->validate([
             'schedule_id' => 'required',
             'conductor_id' => 'required',
-            'dispatcher_id' => 'required',
             'operator_id' => 'required',
             'bus_id' => 'required',
             'date' => ['required', 'after_or_equal:' . now()->format('Y-m-d')],
@@ -71,7 +64,6 @@ class PersonnelScheduleController extends Controller
             'date.required' => 'The schedule date selection is required.',
             'schedule_id.required' => 'The schedule route selection is required.',
             'conductor_id.required' => 'The conductor selection is required.',
-            'dispatcher_id.required' => 'The dispatcher selection is required.',
             'operator_id.required' => 'The operator selection is required.',
             'bus_id.required' => 'The bus selection is required.',
             'max_trips.required' => 'The maximum trips field is required.',
@@ -170,6 +162,7 @@ class PersonnelScheduleController extends Controller
     public function find(Request $request){
         $con = PersonnelSchedule::where('id',$request->id)->value('conductor_id');
         $dis = PersonnelSchedule::where('id',$request->id)->value('dispatcher_id');
+        
         $ope = PersonnelSchedule::where('id',$request->id)->value('operator_id');
         $conductor_name = Personnel::where('id',$con)->value('name');
         $conductor_status = Personnel::where('id',$con)->value('status');
@@ -212,6 +205,9 @@ class PersonnelScheduleController extends Controller
 
         $trip = Trip::where([['personnel_schedule_id',$request->id],['arrived',0]])->get();
         $trip_cnt = count($trip);
+
+        // $test = '<script>'.$dispatcher_name.'</script>';
+        // echo $test;
         return response()->json([
             $conductor_name, $conductor_status, $conductor_acc_email, $conductor_acc_pass, $con_pic,
             $dispatcher_name, $dispatcher_status, $dispatcher_acc_email, $dispatcher_acc_pass, $dis_pic,
@@ -273,9 +269,8 @@ class PersonnelScheduleController extends Controller
         $bus = array();
         // Check if still available for selected date
         $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
-        $bus_list = Bus::where([['company_id', $request->user()->company_id],['status',1]])->get(); //ERROR
+        $bus_list = Bus::where([['company_id', $request->company_id],['status',1]])->get();
         $cnt_bus = 0;
-        
         foreach($bus_list as $bl){
             $cnt_bus = 0;
             foreach($val as $vl){
@@ -288,20 +283,48 @@ class PersonnelScheduleController extends Controller
             }
             
         }
-
-        //         $js_code = '<script>' . $bus[1] . '</script>';
+        // $js_code = '<script>' . $bus[1] . '</script>';
         // echo $js_code;
-        return response()->json(
-            $bus
-        );
-        
+        return response()->json($bus);
     }
 
     public function check_conductor(Request $request){
-        
+        $conductor = array();
+        // Check if still available for selected date
+        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        $personnel_list = Personnel::where([['company_id', $request->company_id],['status',1],['user_type',2]])->get();
+        $cnt_personnel = 0;
+        foreach($personnel_list as $pl){
+            $cnt_personnel = 0;
+            foreach($val as $vl){
+                if($vl->conductor_id == $pl->id){
+                    $cnt_personnel++; 
+                }
+            }
+            if($cnt_personnel == 0){
+                $conductor[] = $pl;
+            }
+        }
+        return response()->json($conductor);
     }
 
     public function check_operator(Request $request){
-        
+        $operator = array();
+        // Check if still available for selected date
+        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        $personnel_list = Personnel::where([['company_id', $request->company_id],['status',1],['user_type',4]])->get();
+        $cnt_personnel = 0;
+        foreach($personnel_list as $pl){
+            $cnt_personnel = 0;
+            foreach($val as $vl){
+                if($vl->operator_id == $pl->id){
+                    $cnt_personnel++; 
+                }
+            }
+            if($cnt_personnel == 0){
+                $operator[] = $pl;
+            }
+        }
+        return response()->json($operator);
     }
 }

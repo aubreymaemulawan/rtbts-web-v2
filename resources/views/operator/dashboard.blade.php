@@ -256,6 +256,11 @@
                                     <h6 class="m-0 me-2">Announcements <span class="badge bg-label-primary rounded-pill">Recent</span></h6>
                                 </div>
                             </div>
+                            @if($announce == null)
+                            <div class="card-body">
+                                <center><div class="mt-4 ">No messages available!</div></center>
+                            </div>
+                            @else
                             <div class="card-body">
                                 <ul class="p-0 m-0 mt-4">
                                     <li class="d-flex mb-1 pb-1">
@@ -303,6 +308,7 @@
                                     </li>
                                 </ul>
                             </div>
+                            @endif
                         </div>
                     </div>
 

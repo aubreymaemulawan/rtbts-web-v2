@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <!-- Dispatcher Info -->
-                        <div class="d-flex align-items-start align-items-sm-center gap-4 mb-4">
+                        <!-- <div class="d-flex align-items-start align-items-sm-center gap-4 mb-4">
                             <img id="view-dispatcher_avatar" src="{{ asset('assets/img/avatars/default.jpg') }}" alt="user-avatar" class="d-block rounded" height="100" width="100"/>
                             <div class="button-wrapper">
                                 <button disabled class="btn btn-primary me-2 mb-2" tabindex="0">Dispatcher</button>
@@ -43,7 +43,7 @@
                                 </select>
                                 <p id="view-dispatcher_name" name="view-dispatcher_name" class="text-muted mb-0"></p>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Operator Info -->
                         <div class="d-flex align-items-start align-items-sm-center gap-4 mb-4">
                             <img id="view-operator_avatar" src="{{ asset('assets/img/avatars/default.jpg') }}" alt="user-avatar" class="d-block rounded" height="100" width="100"/>
@@ -87,6 +87,10 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Go to Edit / Delete Form -->
+                    <div id="view-modal-footer" class="modal-footer">
+                        
+                    </div>
                 </form>
             </div>
         </div>
@@ -105,6 +109,7 @@
                     <hr class="hr-style-1">
                     <div class="modal-body">
                         <!-- Input Hidden ID -->
+                        <input type="hidden" class="form-control" id="dispatcher_id" name="dispatcher_id" value="{{Auth::user()->personnel_id}}">
                         <input type="hidden" class="form-control" id="id" name="id">
                         <div class="row g-2">
                             <!-- Input Date -->
@@ -128,7 +133,7 @@
                                     <select class="form-select" id="schedule_id" name="schedule_id">
                                         <option value="" disabled selected hidden>Please Choose...</option>
                                         @foreach($schedule as $s)
-                                            @if($s->company_id == Auth::user()->company_id)
+                                            @if($s->company_id == Auth::user()->personnel->company_id)
                                                 @if($s->status == 1)
                                                     <option value="{{ $s->id }}">{{ $s->route->from_to_location }}</option>
                                                 @endif
@@ -179,30 +184,6 @@
                                 <!-- Error Message -->
                                 <div class="error-pad">
                                     <span class="errorMsg_bus_id"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- Input Dispatcher -->
-                            <div class="col mb-3">
-                                <label for="dispatcher_id" class="form-label">Dispatcher</label>
-                                <div class="input-group input-group-merge">
-                                    <select class="form-select" id="dispatcher_id" name="dispatcher_id">
-                                        <option value="" disabled selected hidden>Please Choose...</option>
-                                        @foreach($personnel as $p3)
-                                            @if($p3->company_id == Auth::user()->company_id)
-                                                @if($p3->status == 1)
-                                                    @if($p3->user_type == 3)
-                                                        <option value="{{ $p3->id }}">{{ $p3->name }}</option>
-                                                    @endif
-                                                @endif
-                                            @endif
-                                        @endforeach
-                                    </select>                                
-                                </div>
-                                <!-- Error Message -->
-                                <div class="error-pad">
-                                    <span class="errorMsg_dispatcher_id"></span>
                                 </div>
                             </div>
                         </div>
@@ -269,21 +250,57 @@
     <!-- End of Adding / Editing Modal -->
 @endsection
     
-@section('admin_content')
+@section('dispatcher_content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-3">
             <span class="text-muted fw-light">Records /</span> Assigned Schedules
         </h4>
         <div class="alert alert-primary" style="padding:20px">
             <i class="bx bx-info-circle me-1"></i>
-            Real-time Table. Assigned personnel schedules information here.
+            Real-time Table. Assign your personnel schedules information here. You can Add, Update, and View data.
         </div>
         <?php $cnt_bus = 0; $cnt_schedule = 0; $cnt_conductor = 0; $cnt_dispatcher = 0; $cnt_operator = 0;  ?>
         <!-- Schedule Table -->
         <div class="card">
-            <!-- <div class="card-header color">
-              
-            </div> -->
+            <input type="hidden" class="form-control" id="company_id" name="company_id" value="{{Auth::user()->personnel->company_id}}">
+            <div class="card-header color"> 
+                <!-- If Bus table is empty -->
+                @foreach($bus as $bs)
+                    @if($bs->company_id == Auth::user()->personnel->company_id)
+                        @if($bs->status == 1)
+                            <?php $cnt_bus += 1;?>
+                        @endif
+                    @endif
+                @endforeach
+                <!-- If Schedule table is empty -->
+                @foreach($schedule as $sched)
+                    @if($sched->company_id == Auth::user()->personnel->company_id)
+                        @if($sched->status == 1)
+                            <?php $cnt_schedule += 1;?>
+                        @endif
+                    @endif
+                @endforeach
+                <!-- If Personnel table is empty -->
+                @foreach($personnel as $pn)
+                    @if($pn->company_id == Auth::user()->personnel->company_id)
+                        @if($pn->status == 1)
+                            @if($pn->user_type == 2)
+                                <?php $cnt_conductor += 1;?>
+                            @elseif($pn->user_type == 3)
+                                <?php $cnt_dispatcher += 1;?>
+                            @elseif($pn->user_type == 4)
+                                <?php $cnt_operator += 1;?> 
+                            @endif
+                        @endif
+                    @endif
+                @endforeach
+                <!-- Display Button -->
+                @if($cnt_bus != 0 && $cnt_schedule != 0 && $cnt_conductor != 0 && $cnt_dispatcher != 0 && $cnt_operator != 0)
+                    <button onclick="Add()" type="button" class="btn rounded-pill btn-primary">Add New</button>
+                @else
+                    <button onclick="Error( {{$cnt_bus}}, {{$cnt_schedule}}, {{$cnt_conductor}}, {{$cnt_dispatcher}}, {{$cnt_operator}} )" type="button" class="btn rounded-pill btn-primary">Add New</button>
+                @endif
+            </div>
             <div class="card-body pad">
                 <div class="tbl table-responsive">
                     <table id=dataTable class="table table-hover">
@@ -300,9 +317,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead> 
-                        <tbody id="realtime_table_personnel_schedule" class="table-border-bottom-0">
-                        
-                            
+                        <tbody id="realtime_table_assign_schedule" class="table-border-bottom-0">
                         </tbody>
                     </table>
                 </div>
@@ -315,9 +330,9 @@
     <script> 
         // Sidebar
         $('[id^="main"]').removeClass('active open')
-        // $('#main-admin-schedule').addClass('active open')
-        // $('[id^="menu-"]').removeClass('active')
-        $('#main-admin-personnel-schedule').addClass('active')
+        $('#main-dispatcher-assign-schedule').addClass('active open')
+        $('[id^="menu-"]').removeClass('active')
+        $('#menu-personnel-schedule').addClass('active')
         var dropdown1 = $('select[name="bus_id"]');
         var dropdown2 = $('select[name="conductor_id"]');
         var dropdown4 = $('select[name="operator_id"]');
@@ -340,8 +355,12 @@
                 $("#main-modal .errorMsg_operator_id").html('');
                 var date = this.value;
                 var busType = '';
+                
+                var companyId = $('#company_id').val();
+
+                // Bus Dropdown
                 $('#bus_id').html('');
-                Controller.Post('/api/personnel_schedule/check_bus', { 'date': date }).done(function(result1) {
+                Controller.Post('/api/personnel_schedule/check_bus', { 'date': date, 'company_id': companyId }).done(function(result1) {
                     dropdown1.prop('disabled', false);
                     $('#bus_id').html('<option value="" disabled selected hidden>Please choose...</option>');
                     $.each(result1, function (key, value1) {
@@ -354,21 +373,23 @@
                     });
                 });
 
+                // Conductor Dropdown
                 $('#conductor_id').html('');
-                Controller.Post('/api/personnel_schedule/check_conductor', { 'date': date }).done(function(result) {
+                Controller.Post('/api/personnel_schedule/check_conductor', { 'date': date, 'company_id': companyId }).done(function(result) {
                     dropdown2.prop('disabled', false);
                     $('#conductor_id').html('<option value="" disabled selected hidden>Please choose...</option>');
-                    $.each(result, function (key, value) {
-                        // $('#conductor_id').append('<option value="'+ value.id +'">' + value.product_name + ' - ' + value.measurement + '</option>');                            
+                    $.each(result, function (key, value2) {
+                        $('#conductor_id').append('<option value="'+ value2.id +'">' + value2.name + '</option>');                            
                     });
                 });
 
+                // Driver Dropdown
                 $('#operator_id').html('');
-                Controller.Post('/api/personnel_schedule/check_operator', { 'date': date }).done(function(result) {
+                Controller.Post('/api/personnel_schedule/check_operator', { 'date': date, 'company_id': companyId }).done(function(result) {
                     dropdown4.prop('disabled', false);
                     $('#operator_id').html('<option value="" disabled selected hidden>Please choose...</option>');
-                    $.each(result, function (key, value) {
-                        // $('#operator_id').append('<option value="'+ value.id +'">' + value.product_name + ' - ' + value.measurement + '</option>');                            
+                    $.each(result, function (key, value3) {
+                        $('#operator_id').append('<option value="'+ value3.id +'">' + value3.name + '</option>');                            
                     });
                 });
             });
@@ -378,122 +399,47 @@
         function Error( bus, schedule, conductor, dispatcher, operator ){
             // If bus is empty or not active
             if(bus == 0){
-                bootbox.confirm({
+                bootbox.alert({
                 title: "The bus list is currently empty, or no values are active.",
                 closeButton: false,
-                message: "Go to manage bus list?",
-                buttons: {
-                    cancel: {
-                        label: 'No',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Yes',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        location.href = './bus';
-                    }
-                }
+                message: "Please contact admin.",
+                centerVertical: true
                 })
             }
             // If schedule is empty or not active
             else if(schedule == 0){
-                bootbox.confirm({
+                bootbox.alert({
                 title: "The schedule list is currently empty, or no values are active.",
                 closeButton: false,
-                message: "Go to manage schedule list?",
-                buttons: {
-                    cancel: {
-                        label: 'No',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Yes',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        location.href = './schedule';
-                    }
-                }
+                message: "Please contact admin.",
+                centerVertical: true
                 })
             }
             // If personnel:conductor is empty or not active
             else if(conductor == 0){
-                bootbox.confirm({
+                bootbox.alert({
                 title: "The user type conductor is currently empty, or no values are active.",
                 closeButton: false,
-                message: "Go to manage personnel list?",
-                buttons: {
-                    cancel: {
-                        label: 'No',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Yes',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        location.href = './personnel';
-                    }
-                }
+                message: "Please contact admin.",
+                centerVertical: true
                 })
             }
             // If personnel:dispatcher is empty or not active
             else if(dispatcher == 0){
-                bootbox.confirm({
+                bootbox.alert({
                 title: "The user type dispatcher is currently empty, or no values are active.",
                 closeButton: false,
-                message: "Go to manage personnel list?",
-                buttons: {
-                    cancel: {
-                        label: 'No',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Yes',
-                        className : "btn btn-primary",
-                    }
-                },
+                message: "Please contact admin.",
                 centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        location.href = './personnel';
-                    }
-                }
                 })
             }
             // If personnel:operator is empty or not active
             else if(operator == 0){
-                bootbox.confirm({
+                bootbox.alert({
                 title: "The user type operator is currently empty, or no values are active.",
                 closeButton: false,
-                message: "Go to manage personnel list?",
-                buttons: {
-                    cancel: {
-                        label: 'No',
-                        className : "btn btn-outline-secondary",
-                    },
-                    confirm: {
-                        label: 'Yes',
-                        className : "btn btn-primary",
-                    }
-                },
-                centerVertical: true,
-                callback: function(result){
-                    if(result) {
-                        location.href = './personnel';
-                    }
-                }
+                message: "Please contact admin.",
+                centerVertical: true
                 })
             }
         }
@@ -557,7 +503,7 @@
                     
                     // Conductor Name and account status
                     document.getElementById("view-conductor_name").innerHTML="Name : "+conductor_name;
-                    document.getElementById("view-dispatcher_name").innerHTML="Name : "+dispatcher_name;
+                    // document.getElementById("view-dispatcher_name").innerHTML="Name : "+dispatcher_name;
                     document.getElementById("view-operator_name").innerHTML="Name : "+operator_name;
                     if(conductor_acc_email !=null && conductor_acc_pass != null){
                         $('#view-conductor_account').addClass("btn btn-success"),
@@ -621,7 +567,7 @@
             $('#date').val(''),
             $('#schedule_id').val(''),
             $('#conductor_id').val(''),
-            $('#dispatcher_id').val(''),
+            // $('#dispatcher_id').val(''),
             $('#operator_id').val(''),
             $('#bus_id').val(''),
             $('#max_trips').val(''),
@@ -629,7 +575,7 @@
             $("#main-modal .errorMsg_date").html('');
             $("#main-modal .errorMsg_schedule_id").html('');
             $("#main-modal .errorMsg_conductor_id").html('');
-            $("#main-modal .errorMsg_dispatcher_id").html('');
+            // $("#main-modal .errorMsg_dispatcher_id").html('');
             $("#main-modal .errorMsg_operator_id").html('');
             $("#main-modal .errorMsg_bus_id").html('');
             $("#main-modal .errorMsg_max_trips").html('');
@@ -711,28 +657,28 @@
                 // If success, return message
                 .done(function(result) {
                     // If route already registered, display error
-                    if(result == 1 || result == 2 || result == 3 || result == 4){
-                        if(result == 1){
-                            let msg_bus_id = "<text>The bus number has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_bus_id").html(msg_bus_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                        if(result == 2){
-                            let msg_conductor_id = "<text>The conductor has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_conductor_id").html(msg_conductor_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                        // if(result == 3){
-                        //     let msg_dispatcher_id = "<text>The dispatcher has a schedule already for selected date.</text>";
-                        //     $("#main-modal .errorMsg_dispatcher_id").html(msg_dispatcher_id).addClass('text-danger').fadeIn(1000);
-                        //     $("#main-modal button").attr('disabled',false);
-                        // }
-                        if(result == 4){
-                            let msg_operator_id = "<text>The operator has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_operator_id").html(msg_operator_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                    }else{
+                    // if(result == 1 || result == 2 || result == 3 || result == 4){
+                    //     if(result == 1){
+                    //         let msg_bus_id = "<text>The bus number has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_bus_id").html(msg_bus_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    //     if(result == 2){
+                    //         let msg_conductor_id = "<text>The conductor has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_conductor_id").html(msg_conductor_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    //     // if(result == 3){
+                    //     //     let msg_dispatcher_id = "<text>The dispatcher has a schedule already for selected date.</text>";
+                    //     //     $("#main-modal .errorMsg_dispatcher_id").html(msg_dispatcher_id).addClass('text-danger').fadeIn(1000);
+                    //     //     $("#main-modal button").attr('disabled',false);
+                    //     // }
+                    //     if(result == 4){
+                    //         let msg_operator_id = "<text>The operator has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_operator_id").html(msg_operator_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    // }else{
                         var dialog = bootbox.dialog({
                         centerVertical: true,
                         closeButton: false,
@@ -746,7 +692,7 @@
                                 window.location.reload();
                             }, 1500);
                         });
-                    }
+                    // }
                 })
                 // If fail, show errors
                 .fail(function (error) {
@@ -797,28 +743,28 @@
                 Controller.Post('/api/personnel_schedule/update', data)
                 // If success, return message
                 .done(function(result) {
-                    if(result == 1 || result == 2 || result == 3 || result == 4){
-                        if(result == 1){
-                            let msg_bus_id = "<text>The bus number has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_bus_id").html(msg_bus_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                        if(result == 2){
-                            let msg_conductor_id = "<text>The conductor has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_conductor_id").html(msg_conductor_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                        if(result == 3){
-                            let msg_dispatcher_id = "<text>The dispatcher has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_dispatcher_id").html(msg_dispatcher_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                        if(result == 4){
-                            let msg_operator_id = "<text>The operator has a schedule already for selected date.</text>";
-                            $("#main-modal .errorMsg_operator_id").html(msg_operator_id).addClass('text-danger').fadeIn(1000);
-                            $("#main-modal button").attr('disabled',false);
-                        }
-                    }else{
+                    // if(result == 1 || result == 2 || result == 3 || result == 4){
+                    //     if(result == 1){
+                    //         let msg_bus_id = "<text>The bus number has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_bus_id").html(msg_bus_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    //     if(result == 2){
+                    //         let msg_conductor_id = "<text>The conductor has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_conductor_id").html(msg_conductor_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    //     if(result == 3){
+                    //         let msg_dispatcher_id = "<text>The dispatcher has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_dispatcher_id").html(msg_dispatcher_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    //     if(result == 4){
+                    //         let msg_operator_id = "<text>The operator has a schedule already for selected date.</text>";
+                    //         $("#main-modal .errorMsg_operator_id").html(msg_operator_id).addClass('text-danger').fadeIn(1000);
+                    //         $("#main-modal button").attr('disabled',false);
+                    //     }
+                    // }else{
                         var dialog = bootbox.dialog({
                         centerVertical: true,
                         closeButton: false,
@@ -832,7 +778,7 @@
                                 window.location.reload();
                             }, 1500);
                         });
-                    }
+                    // }
                 })
                 // If fail, show errors
                 .fail(function (error) {
@@ -926,18 +872,17 @@
         // }
     </script>
     <script>
-        function loadXMLDoc() {
+        function loadXMLDoc() { 
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     $(function () {
                         $('[data-bs-toggle="tooltip"]').tooltip();
                     });
-                    document.getElementById("realtime_table_personnel_schedule").innerHTML =
-                    this.responseText;
+                    document.getElementById("realtime_table_assign_schedule").innerHTML = this.responseText;
                 }
             };
-            xhttp.open("GET", "./tbl-personnel-schedule", true);
+            xhttp.open("GET", "./tbl-dispatcher-assign-schedule", true);
             xhttp.send();
         }
         setInterval(function(){

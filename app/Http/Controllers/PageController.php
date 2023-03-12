@@ -241,6 +241,16 @@ class PageController extends Controller
         return view('dispatcher.password',compact('personnel'));
     }
 
+    public function dispatcher_assign_schedule(){
+        $personnel_schedule = PersonnelSchedule::orderBy('date','desc')->get();
+        $trip = Trip::where('arrived',0)->get();
+        $schedule = Schedule::all();
+        $bus = Bus::all();
+        $personnel = Personnel::all();
+        $company = Company::all();
+        return view('dispatcher.assign-schedule',compact('personnel_schedule','schedule','bus','personnel','company','trip'));
+    }
+
 
     // Operator Views
     public function operator_schedule(){

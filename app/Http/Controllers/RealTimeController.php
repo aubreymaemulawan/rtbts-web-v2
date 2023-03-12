@@ -62,6 +62,16 @@ class RealTimeController extends Controller
         return view('dispatcher.table.tbl-trip',compact('personnel','trip','schedule','company'));
     }
 
+    public function tbl_dispatcher_assign_schedule(){
+        $personnel_schedule = PersonnelSchedule::orderBy('date','desc')->get();
+        $trip = Trip::where('arrived',0)->get();
+        $schedule = Schedule::all();
+        $bus = Bus::all();
+        $personnel = Personnel::all();
+        $company = Company::all();
+        return view('dispatcher.table.tbl-assign-schedule',compact('personnel_schedule','schedule','bus','personnel','company','trip'));
+    }
+
 
     // OPERATOR
     public function tbl_operator_schedule(){

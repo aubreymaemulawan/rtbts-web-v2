@@ -41,17 +41,21 @@
                 </a>
             </li>
 
+            <!-- Management Divider -->
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">Management</span>
+            </li>
+
+            <!-- Assign Schedule List -->
+            <li id=main-dispatcher-assign-schedule class="menu-item">
+                <a href="./dispatcher-assign-schedule" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                    <div data-i18n="Assign Schedule">Assign Schedule</div>
+                </a>
+            </li>
             <!-- Records Divider -->
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text">Records</span>
-            </li>
-
-            <!-- Schedule List -->
-            <li id=main-dispatcher-schedule class="menu-item">
-                <a href="./dispatcher-schedule" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-calendar"></i>
-                    <div data-i18n="Schedule List">Schedule List</div>
-                </a>
             </li>
 
             <!-- Trip Records -->
