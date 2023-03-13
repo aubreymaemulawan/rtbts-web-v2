@@ -103,20 +103,17 @@
                             <div data-i18n="Manage Schedules">Manage Schedules</div>
                         </a>
                     </li>
+                    <li id=main-admin-personnel-schedule class="menu-item">
+                        <a href="./personnel-schedule" class="menu-link">
+                            <div data-i18n="Assigned Schedules">Assigned Schedules</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
             <!-- Records Divider -->
             <li class="menu-header small text-uppercase">
                 <span class="menu-header-text">Records</span>
-            </li>
-
-            <!-- Trip Record -->
-            <li id=main-admin-personnel-schedule class="menu-item">
-                <a href="./personnel-schedule" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-list-ol"></i>
-                    <div data-i18n="Assigned Schedules">Assigned Schedules</div>
-                </a>
             </li>
 
             <!-- Trip Record -->

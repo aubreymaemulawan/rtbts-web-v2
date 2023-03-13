@@ -477,7 +477,6 @@ class AuthController extends Controller
             'password' => 'required|string',
             'personnel_id' => 'required',
             'contact_no' => 'required',
-            'age' => 'required',
             'address' => 'required|string',
         ];
         $request->validate($rules);
@@ -490,15 +489,13 @@ class AuthController extends Controller
         // Return
         if ($user && Hash::check($request->password, $user->password) && $user->user_type == 2) {
             $old_data = Personnel::where('id', $request->personnel_id)->first();
-            if($old_data->age == $request->age && $old_data->contact_no == $request->contact_no && 
-            $old_data->address == $request->address){
+            if($old_data->contact_no == $request->contact_no && $old_data->address == $request->address){
                 $response = ['message' => 'No new values added.'];
                 return response()->json($response, 400);
             }
             else{
                 Personnel::where('id', $request->personnel_id)->update(
                     array(
-                        'age' => $request->age,
                         'contact_no' => $request->contact_no,
                         'address' => $request->address,
                         'updated_at' => now(),

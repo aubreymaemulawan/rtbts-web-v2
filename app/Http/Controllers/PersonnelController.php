@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Account;
 use App\Models\Bus;
 use App\Models\Schedule;
+use App\Models\PersonnelRole;
 use App\Models\PersonnelSchedule;
 use DB;
 use File;
@@ -32,7 +33,7 @@ class PersonnelController extends Controller
             'name' => ['unique:personnel', 'unique:users'],
             'first_name' => 'required',
             'last_name' => 'required',
-            'contact_no' => 'required|digits:11',
+            'contact_no' => 'required|digits:10',
             'birthdate' => 'required',
             'address' => 'required',
             'user_type' => 'required',
@@ -105,7 +106,7 @@ class PersonnelController extends Controller
             'edit-name' => [Rule::unique('personnel','name')->ignore($request->input("edit-id"))],
             'edit-first_name' => 'required',
             'edit-last_name' => 'required',
-            'edit-contact_no' => 'required|digits:11',
+            'edit-contact_no' => 'required|digits:10',
             'edit-birthdate' => 'required',
             'edit-address' => 'required',
             'edit-user_type' => 'required',
@@ -158,6 +159,20 @@ class PersonnelController extends Controller
             // There is an active assigned-schedule using that personnel id
             return response()->json(1);
         }else{  
+            // If usertype changed, save to Personnel Role DB
+            $role = Personnel::where('id',$request->input("edit-id"))->first();
+            if($role->user_type != $request->input("edit-user_type")){
+                DB::table('personnel_role')->where('personnel_id', $request->input("edit-id"))->latest()->update([
+                    'date_ended' => date('Y-m-d')
+                ]);
+                $per_role = new PersonnelRole();
+                $per_role->personnel_id = $request->input("edit-id");
+                $per_role->date_started = date('Y-m-d');
+                $per_role->date_ended = null;
+                $per_role->user_type = $request->input("edit-user_type");
+                $per_role->save();
+            }
+
             // Update Data in DB (Personnel Table)
             $data = Personnel::find($request->input("edit-id"));
             $data->company_id = $request->input("edit-company_id");
@@ -301,6 +316,7 @@ class PersonnelController extends Controller
                 }
             }
             
+
             // If status is not active, delete Authentication in DB (User Table)
             else if($request->input("edit-status") == 2){
                 $user_delete = User::where('personnel_id',$request->input("edit-id"));
@@ -310,15 +326,7 @@ class PersonnelController extends Controller
                 DB::table('personnel_schedule')->where([['dispatcher_id', '=', $request->input("edit-id")],['status', '=', 1]])->update(['status' => 4]);
                 DB::table('personnel_schedule')->where([['operator_id', '=', $request->input("edit-id")],['status', '=', 1]])->update(['status' => 4]);
             }
-
-            // If usertype changed, save to Personnel Role DB
-            // $data = Personnel::find($request->input("edit-id"));
-
-            // $data2 = new Account();
-            // $data2->personnel_id = $request->input("edit-id");
-            // $data2->email = $request->input("edit-personnel_no");
-            // $data2->password = $request->input("edit-personnel_no");
-            // $data2->save();
+            
             // Return 
             return json_encode(
                 ['success'=>true]

@@ -123,7 +123,7 @@ class PageController extends Controller
         return view('admin.trip',compact('trip','schedule','company'));
     }
 
-    public function track(Request $request){ //copy
+    public function track(Request $request){
         $bus_id = 0;
         $bus_no = 0;
         $bus_type = 0;
@@ -145,33 +145,35 @@ class PageController extends Controller
                 $status = Status::where('trip_id',$tr->id)->latest('created_at')->first();
                 $bus_id = $tr->personnel_schedule->bus_id;
                 $position = Position::where('bus_id', $bus_id)->latest('created_at')->first();
-                if(!$status){
-                    $bus_status = 'N/A';
-                    $status_created = '';
-                }else{
-                    $bus_status = $status->bus_status;
-                    $status_created = $status->created_at;
+                if($position){
+                    if(!$status){
+                        $bus_status = 'N/A';
+                        $status_created = '';
+                    }else{
+                        $bus_status = $status->bus_status;
+                        $status_created = $status->created_at;
+                    }
+                    $str = explode("-",$tr->personnel_schedule->schedule->route->from_to_location);
+                    $origin = $str[0];
+                    $destination = $str[1];
+                    if($tr->inverse == 1){
+                        $from_to_location = $destination.' - '.$origin;
+                    }else{
+                        $from_to_location = $origin.' - '.$destination;
+                    }
+                    $orig_latitude = $position->latitude;
+                    $orig_longitude = $position->longitude;
+                    $bus_no = $tr->personnel_schedule->bus->bus_no;
+                    if($tr->personnel_schedule->bus->bus_type == 1){
+                        $bus_type = "Airconditioned";
+                    }else{
+                        $bus_type = "Non-Airconditioned";
+                    }
+                    $bus_color = $tr->personnel_schedule->bus->color;
+                    $trip_id = $tr->id;
+                    $trip_no = $tr->trip_no;
+                    $ongoing_trip[$key] = array($from_to_location, $orig_latitude, $orig_longitude, $bus_id, $bus_no, $bus_type, $bus_color, $trip_id, $trip_no, $bus_status, $status_created);
                 }
-                $str = explode("-",$tr->personnel_schedule->schedule->route->from_to_location);
-                $origin = $str[0];
-                $destination = $str[1];
-                if($tr->inverse == 1){
-                    $from_to_location = $destination.' - '.$origin;
-                }else{
-                    $from_to_location = $origin.' - '.$destination;
-                }
-                $orig_latitude = $position->latitude;
-                $orig_longitude = $position->longitude;
-                $bus_no = $tr->personnel_schedule->bus->bus_no;
-                if($tr->personnel_schedule->bus->bus_type == 1){
-                    $bus_type = "Airconditioned";
-                }else{
-                    $bus_type = "Non-Airconditioned";
-                }
-                $bus_color = $tr->personnel_schedule->bus->color;
-                $trip_id = $tr->id;
-                $trip_no = $tr->trip_no;
-                $ongoing_trip[$key] = array($from_to_location, $orig_latitude, $orig_longitude, $bus_id, $bus_no, $bus_type, $bus_color, $trip_id, $trip_no, $bus_status, $status_created);
             }
         }
         echo "<script>console.log(".json_encode($ongoing_trip).")</script>";

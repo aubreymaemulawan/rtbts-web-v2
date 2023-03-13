@@ -13,7 +13,7 @@ return new class extends Migration
             $table->increments('id');;
             $table->integer('personnel_id')->unsigned();
             $table->date('date_started');
-            $table->date('date_ended');
+            $table->date('date_ended')->nullable();
             $table->string('user_type');
             $table->timestamps();
 

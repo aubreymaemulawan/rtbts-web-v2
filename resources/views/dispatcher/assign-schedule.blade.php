@@ -479,11 +479,11 @@
                     }else{
                         document.getElementById('view-conductor_avatar').src = con_pic;
                     }
-                    if(dis_pic==""){
-                        document.getElementById('view-dispatcher_avatar').src='{{ asset('assets/img/avatars/default.jpg') }}';
-                    }else{
-                        document.getElementById('view-dispatcher_avatar').src = dis_pic;
-                    }
+                    // if(dis_pic==""){
+                    //     document.getElementById('view-dispatcher_avatar').src='{{ asset('assets/img/avatars/default.jpg') }}';
+                    // }else{
+                    //     document.getElementById('view-dispatcher_avatar').src = dis_pic;
+                    // }
                     if(ope_pic==""){
                         document.getElementById('view-operator_avatar').src='{{ asset('assets/img/avatars/default.jpg') }}';
                     }else{
@@ -512,13 +512,13 @@
                         $('#view-conductor_account').addClass("btn btn-danger")
                         $('#view-conductor_account').val(2)
                     }
-                    if(dispatcher_acc_email !=null && dispatcher_acc_pass != null){
-                        $('#view-dispatcher_account').addClass("btn btn-success"),
-                        $('#view-dispatcher_account').val(1)
-                    }else{
-                        $('#view-dispatcher_account').addClass("btn btn-danger"),
-                        $('#view-dispatcher_account').val(2)
-                    }
+                    // if(dispatcher_acc_email !=null && dispatcher_acc_pass != null){
+                    //     $('#view-dispatcher_account').addClass("btn btn-success"),
+                    //     $('#view-dispatcher_account').val(1)
+                    // }else{
+                    //     $('#view-dispatcher_account').addClass("btn btn-danger"),
+                    //     $('#view-dispatcher_account').val(2)
+                    // }
                     if(operator_acc_email !=null && operator_acc_pass != null){
                         $('#view-operator_account').addClass("btn btn-success"),
                         $('#view-operator_account').val(1)
@@ -617,12 +617,58 @@
                 $('#id').val(result.id),
                 $('#date').val(result.date),
                 $('#schedule_id').val(result.schedule_id),
-                $('#conductor_id').val(result.conductor_id),
                 $('#dispatcher_id').val(result.dispatcher_id),
-                $('#operator_id').val(result.operator_id),
-                $('#bus_id').val(result.bus_id),
                 $('#max_trips').val(result.max_trips),
-                $('#status').val(result.status),
+                $('#status').val(result.status);
+
+
+                var date = result.date;
+                var busType = '';
+                var companyId = $('#company_id').val();
+
+                var data = {
+                    ps_id: result.id,
+                    date: date,
+                    company_id: companyId,
+                    type: 'update'
+                }
+                // Bus Dropdown
+                $('#bus_id').html('');
+                Controller.Post('/api/personnel_schedule/check_bus', data).done(function(result1) {
+                    dropdown1.prop('disabled', false);
+                    // $('#bus_id').html('<option value="" disabled selected hidden>Please choose...</option>');
+                    $.each(result1, function (key, value1) {
+                        if(value1['bus_type'] == 1){
+                            busType = 'Aircon';
+                        }else if(value1['bus_type'] == 2){
+                            busType = 'Non-Aircon';
+                        } 
+                        $('#bus_id').append('<option value="'+ value1['id'] +'">'+ value1['bus_no']+' - '+ busType + '</option>'); 
+                    });
+                });
+
+                // Conductor Dropdown
+                $('#conductor_id').html('');
+                Controller.Post('/api/personnel_schedule/check_conductor', data).done(function(result) {
+                    dropdown2.prop('disabled', false);
+                    $.each(result, function (key, value2) {
+                        $('#conductor_id').append('<option value="'+ value2.id +'">' + value2.name + '</option>');                            
+                    });
+                });
+
+                // Driver Dropdown
+                $('#operator_id').html('');
+                Controller.Post('/api/personnel_schedule/check_operator', data).done(function(result) {
+                    dropdown4.prop('disabled', false);
+                    $.each(result, function (key, value3) {
+                        $('#operator_id').append('<option value="'+ value3.id +'">' + value3.name + '</option>');                            
+                    });
+                });
+
+                $('#bus_id').val(result.bus_id),
+                $('#conductor_id').val(result.conductor_id),
+                $('#operator_id').val(result.operator_id),
+                
                 // Show Modal
                 $('#main-modal').modal('show');
             });

@@ -268,7 +268,13 @@ class PersonnelScheduleController extends Controller
     public function check_bus(Request $request){
         $bus = array();
         // Check if still available for selected date
-        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        if($request->type){
+            if($request->type == 'update'){
+                $val = PersonnelSchedule::where([['id','==',$request->ps_id],['status','!=',2],['date',$request->date]])->get();
+            }
+        }else{
+            $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        }
         $bus_list = Bus::where([['company_id', $request->company_id],['status',1]])->get();
         $cnt_bus = 0;
         foreach($bus_list as $bl){
@@ -283,15 +289,19 @@ class PersonnelScheduleController extends Controller
             }
             
         }
-        // $js_code = '<script>' . $bus[1] . '</script>';
-        // echo $js_code;
         return response()->json($bus);
     }
 
     public function check_conductor(Request $request){
         $conductor = array();
         // Check if still available for selected date
-        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        if($request->type){
+            if($request->type == 'update'){
+                $val = PersonnelSchedule::where([['id','==',$request->ps_id],['status','!=',2],['date',$request->date]])->get();
+            }
+        }else{
+            $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        }
         $personnel_list = Personnel::where([['company_id', $request->company_id],['status',1],['user_type',2]])->get();
         $cnt_personnel = 0;
         foreach($personnel_list as $pl){
@@ -311,7 +321,13 @@ class PersonnelScheduleController extends Controller
     public function check_operator(Request $request){
         $operator = array();
         // Check if still available for selected date
-        $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        if($request->type){
+            if($request->type == 'update'){
+                $val = PersonnelSchedule::where([['id','==',$request->ps_id],['status','!=',2],['date',$request->date]])->get();
+            }
+        }else{
+            $val = PersonnelSchedule::where([['status','!=',2],['date',$request->date]])->get();
+        }
         $personnel_list = Personnel::where([['company_id', $request->company_id],['status',1],['user_type',4]])->get();
         $cnt_personnel = 0;
         foreach($personnel_list as $pl){

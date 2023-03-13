@@ -12,9 +12,6 @@
         </div>
         <!-- Account Table -->
         <div class="card">
-            <div class="card-header color">
-                <a type="button" class="btn rounded-pill btn-primary" href="./personnel">Go to Manage</a>
-            </div>
             <div class="card-body pad">
                 <div class="tbl table-responsive text-nowrap">
                     <table id=dataTable class="table table-hover">
